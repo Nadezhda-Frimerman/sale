@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Size;
-import java.util.Objects;
 
 @Data
 @AllArgsConstructor
@@ -14,7 +13,7 @@ import java.util.Objects;
 @Builder
 public class Login {
     @Size(min = 8, max = 16)
-    private String password = "";
+    private String password;
     @Size(min = 4, max = 32)
-    private String username = "";
+    private String username;
 }

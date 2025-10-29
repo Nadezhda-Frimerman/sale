@@ -1,55 +1,20 @@
 package ru.skypro.homework.dto;
-
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Comments {
-//    Collection
-    private Integer count = 0;
-    private List<Comment> results = new ArrayList<>();
 
-    public Comments() {
-    }
+    private Integer count;
+    private Collection<Comment> results = new ArrayList<>();
 
-    public Comments(Integer count, List<Comment> results) {
-        this.count = count;
-        this.results = results;
-    }
 
-    public Integer getCount() {
-        return count;
-    }
-
-    public void setCount(Integer count) {
-        this.count = count;
-    }
-
-    public List<Comment> getResults() {
-        return results;
-    }
-
-    public void setResults(List<Comment> results) {
-        this.results = results;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Comments comments = (Comments) o;
-        return Objects.equals(count, comments.count) && Objects.equals(results, comments.results);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(count, results);
-    }
-
-    @Override
-    public String toString() {
-        return "Comments{" +
-                "count=" + count +
-                ", results=" + results +
-                '}';
-    }
 }
