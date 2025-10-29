@@ -8,7 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
-import ru.skypro.homework.service.UsersService;
 import ru.skypro.homework.service.impl.UsersServiceImpl;
 
 @Slf4j
