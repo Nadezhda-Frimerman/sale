@@ -1,11 +1,14 @@
 package ru.skypro.homework.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Objects;
 
 public class CreateOrUpdateComment {
-    @NotNull
+//    @NotNull
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     @Size(min = 8, max = 64)
     private String text = "";
 

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Comments {
+//    Collection
     private Integer count = 0;
     private List<Comment> results = new ArrayList<>();
 

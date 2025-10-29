@@ -1,5 +1,6 @@
 package ru.skypro.homework.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -12,12 +13,13 @@ import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.service.impl.AdsServiceImpl;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads")
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class AdsController {
     private final AdsServiceImpl adsService;
 
@@ -27,9 +29,10 @@ public class AdsController {
 
     @GetMapping
     public Ads getAllAds() {
-        return new Ads();
+        return new Ads(1, List.of(new Ad(1,"sfd",2,3,"fdnvisur")));
     }
 
+//    @Operation()
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Ad addAd(@RequestPart("properties") @Valid CreateOrUpdateAd properties,
                     @RequestPart("image") MultipartFile image) {

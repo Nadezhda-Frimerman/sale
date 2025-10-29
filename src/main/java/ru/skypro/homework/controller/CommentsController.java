@@ -13,7 +13,7 @@ import ru.skypro.homework.service.impl.CommentsServiceImpl;
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads")
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class CommentsController {
     private final CommentsServiceImpl commentsService;
 

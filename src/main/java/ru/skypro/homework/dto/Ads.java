@@ -1,17 +1,18 @@
 package ru.skypro.homework.dto;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
 public class Ads {
     private Integer count = 0;
-    private List<Ad> results = new ArrayList<>();
+    private Collection<Ad> results = new ArrayList<>();
 
     public Ads() {
     }
 
-    public Ads(Integer count, List<Ad> results) {
+    public Ads(Integer count, Collection<Ad> results) {
         this.count = count;
         this.results = results;
     }
@@ -24,7 +25,7 @@ public class Ads {
         this.count = count;
     }
 
-    public List<Ad> getResults() {
+    public Collection<Ad> getResults() {
         return results;
     }
 

@@ -1,11 +1,15 @@
 package ru.skypro.homework.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import java.util.Objects;
 
+@Schema(description = "Пользователь")
 public class CreateOrUpdateAd {
+//    @Schema добавить в дто Tag, Operation
     @Size(min = 4, max = 32)
     private String title = "";
     @Min(value = 0)

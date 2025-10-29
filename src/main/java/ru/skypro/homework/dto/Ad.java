@@ -3,7 +3,9 @@ package ru.skypro.homework.dto;
 import java.util.Objects;
 
 public class Ad {
-    private Integer author = 0;
+//    int and Integer default 0 is the difference
+//    fix: delete 0/null/""
+    private Integer author = null;
     private String image = "";
     private Integer pk = 0;
     private Integer price = 0;

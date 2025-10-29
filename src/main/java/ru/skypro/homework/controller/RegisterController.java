@@ -9,7 +9,7 @@ import ru.skypro.homework.service.impl.RegisterServiceImpl;
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class RegisterController {
     private final RegisterServiceImpl registerService;
 
