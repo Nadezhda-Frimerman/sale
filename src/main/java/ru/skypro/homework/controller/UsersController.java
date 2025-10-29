@@ -9,6 +9,7 @@ import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
 import ru.skypro.homework.service.UsersService;
+import ru.skypro.homework.service.impl.UsersServiceImpl;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -16,9 +17,9 @@ import ru.skypro.homework.service.UsersService;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UsersController {
-    private final UsersService usersService;
+    private final UsersServiceImpl usersService;
 
-    public UsersController(UsersService usersService) {
+    public UsersController(UsersServiceImpl usersService) {
         this.usersService = usersService;
     }
 
