@@ -1,55 +1,30 @@
 package ru.skypro.homework.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.validation.constraints.Size;
-import java.util.Objects;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Schema(description = "Модель данных для смены пароля")
 public class NewPassword {
+    @Schema(
+            type = "string",
+            description = "текущий пароль"
+    )
     @Size(min = 8, max = 16)
-    private String currentPassword = "";
+    private String currentPassword;
+
+    @Schema(
+            type = "string",
+            description = "новый пароль"
+    )
     @Size(min = 8, max = 16)
-    private String newPassword = "";
-
-    public NewPassword() {
-    }
-
-    public NewPassword(String currentPassword, String newPassword) {
-        this.currentPassword = currentPassword;
-        this.newPassword = newPassword;
-    }
-
-    public String getCurrentPassword() {
-        return currentPassword;
-    }
-
-    public void setCurrentPassword(String currentPassword) {
-        this.currentPassword = currentPassword;
-    }
-
-    public String getNewPassword() {
-        return newPassword;
-    }
-
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        NewPassword that = (NewPassword) o;
-        return Objects.equals(currentPassword, that.currentPassword) && Objects.equals(newPassword, that.newPassword);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(currentPassword, newPassword);
-    }
-
-    @Override
-    public String toString() {
-        return "NewPassword{" +
-                "currentPassword='" + currentPassword + '\'' +
-                ", newPassword='" + newPassword + '\'' +
-                '}';
-    }
+    private String newPassword;
 }

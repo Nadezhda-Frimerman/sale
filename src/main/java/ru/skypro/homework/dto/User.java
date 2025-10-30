@@ -1,107 +1,57 @@
 package ru.skypro.homework.dto;
 
-import java.util.Objects;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Schema(description = "Модель данных пользователя")
 public class User {
-    private Integer id = 0;
-    private String email = "";
-    private String firstName = "";
-    private String lastName = "";
-    private String phone = "";
-    private Role role = Role.USER;
-    private String image = "";
+    @Schema(
+            type = "integer",
+            format = "int32",
+            description = "id пользователя"
+    )
+    private Integer id;
 
-    public User() {
-    }
+    @Schema(
+            type = "string",
+            description = "логин пользователя"
+    )
+    private String email;
 
-    public User(Integer id, String email, String firstName, String lastName, String phone, Role role, String image) {
-        this.id = id;
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phone = phone;
-        this.role = role;
-        this.image = image;
-    }
+    @Schema(
+            type = "string",
+            description = "имя пользователя"
+    )
+    private String firstName;
 
-    public Integer getId() {
-        return id;
-    }
+    @Schema(
+            type = "string",
+            description = "фамилия пользователя"
+    )
+    private String lastName;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    @Schema(
+            type = "string",
+            description = "телефон пользователя"
+    )
+    private String phone;
 
-    public String getEmail() {
-        return email;
-    }
+    @Schema(
+            type = "string",
+            description = "роль пользователя"
+    )
+    private Role role;
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(email, user.email) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(phone, user.phone) && role == user.role && Objects.equals(image, user.image);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, email, firstName, lastName, phone, role, image);
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", phone='" + phone + '\'' +
-                ", role=" + role +
-                ", image='" + image + '\'' +
-                '}';
-    }
+    @Schema(
+            type = "string",
+            description = "ссылка на аватар пользователя"
+    )
+    private String image;
 }

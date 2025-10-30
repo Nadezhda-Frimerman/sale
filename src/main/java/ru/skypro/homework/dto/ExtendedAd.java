@@ -1,129 +1,70 @@
 package ru.skypro.homework.dto;
 
-import java.util.Objects;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Schema(description = "Модель данных для расширенной версии рекламного объявления")
 public class ExtendedAd {
-    private Integer pk = 0;
-    private String authorFirstName = "";
-    private String authorLastName = "";
-    private String description = "";
-    private String email = "";
-    private String image = "";
-    private String phone = "";
-    private Integer price = 0;
-    private String title = "";
+    @Schema(
+            type = "integer",
+            format = "int32",
+            description = "id объявления"
+    )
+    private Integer pk;
 
-    public ExtendedAd() {
-    }
+    @Schema(
+            type = "string",
+            description = "имя автора объявления"
+    )
+    private String authorFirstName;
 
-    public ExtendedAd(Integer pk, String authorFirstName, String authorLastName, String description, String email, String image, String phone, Integer price, String title) {
-        this.pk = pk;
-        this.authorFirstName = authorFirstName;
-        this.authorLastName = authorLastName;
-        this.description = description;
-        this.email = email;
-        this.image = image;
-        this.phone = phone;
-        this.price = price;
-        this.title = title;
-    }
+    @Schema(
+            type = "string",
+            description = "фамилия автора объявления"
+    )
+    private String authorLastName;
 
-    public Integer getPk() {
-        return pk;
-    }
+    @Schema(
+            type = "string",
+            description = "описание объявления"
+    )
+    private String description;
 
-    public void setPk(Integer pk) {
-        this.pk = pk;
-    }
+    @Schema(
+            type = "string",
+            description = "логин автора объявления"
+    )
+    private String email;
 
-    public String getAuthorFirstName() {
-        return authorFirstName;
-    }
+    @Schema(
+            type = "string",
+            description = "ссылка на картинку объявления"
+    )
+    private String image;
 
-    public void setAuthorFirstName(String authorFirstName) {
-        this.authorFirstName = authorFirstName;
-    }
+    @Schema(
+            type = "string",
+            description = "телефон автора объявления"
+    )
+    private String phone;
 
-    public String getAuthorLastName() {
-        return authorLastName;
-    }
+    @Schema(
+            type = "integer",
+            format = "int32",
+            description = "цена объявления"
+    )
+    private Integer price;
 
-    public void setAuthorLastName(String authorLastName) {
-        this.authorLastName = authorLastName;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public Integer getPrice() {
-        return price;
-    }
-
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        ExtendedAd that = (ExtendedAd) o;
-        return Objects.equals(pk, that.pk) && Objects.equals(authorFirstName, that.authorFirstName) && Objects.equals(authorLastName, that.authorLastName) && Objects.equals(description, that.description) && Objects.equals(email, that.email) && Objects.equals(image, that.image) && Objects.equals(phone, that.phone) && Objects.equals(price, that.price) && Objects.equals(title, that.title);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(pk, authorFirstName, authorLastName, description, email, image, phone, price, title);
-    }
-
-    @Override
-    public String toString() {
-        return "ExtendedAd{" +
-                "pk=" + pk +
-                ", authorFirstName='" + authorFirstName + '\'' +
-                ", authorLastName='" + authorLastName + '\'' +
-                ", description='" + description + '\'' +
-                ", email='" + email + '\'' +
-                ", image='" + image + '\'' +
-                ", phone='" + phone + '\'' +
-                ", price=" + price +
-                ", title='" + title + '\'' +
-                '}';
-    }
+    @Schema(
+            type = "string",
+            description = "заголовок объявления"
+    )
+    private String title;
 }
