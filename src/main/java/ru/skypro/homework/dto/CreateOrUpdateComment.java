@@ -12,11 +12,12 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Schema(description = "Модель данных для создания или обновления комментария")
 public class CreateOrUpdateComment {
-//    @NotNull
-    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
+    @NotNull
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED,
+    type = "string",
+    description = "текст комментария")
     @Size(min = 8, max = 64)
     private String text;
-
-
 }
