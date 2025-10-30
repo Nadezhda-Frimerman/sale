@@ -16,7 +16,8 @@ import javax.validation.constraints.Size;
 public class Login {
     @Schema(
             type = "string",
-            description = "пароль"
+            description = "пароль",
+            example = "stringst"
     )
     @Size(min = 8, max = 16)
     private String password;

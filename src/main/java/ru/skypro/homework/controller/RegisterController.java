@@ -5,8 +5,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.service.impl.RegisterServiceImpl;
@@ -14,8 +12,8 @@ import ru.skypro.homework.service.impl.RegisterServiceImpl;
 
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
-@Tag(name = "Регистрация", description = "Методы для регистрации пользователя")
 @RequiredArgsConstructor
+@Tag(name = "Регистрация", description = "Методы для регистрации пользователя")
 public class RegisterController {
     private RegisterServiceImpl registerServiceImpl;
 
@@ -26,17 +24,11 @@ public class RegisterController {
             operationId = "register"
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "201", description = "Created"),
             @ApiResponse(responseCode = "400", description = "Bad Request")
     })
-    public ResponseEntity<String> register(@RequestBody Register register) {
-
-        if (true) {
-            return ResponseEntity.ok("Регистрация успешна");
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Неверные данные");
-        }
-
+    public void register(@RequestBody Register register) {
     }
 
 }
+

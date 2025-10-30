@@ -24,7 +24,8 @@ public class Register {
 
     @Schema(
             type = "string",
-            description = "пароль"
+            description = "пароль",
+            example = "stringst"
     )
     @Size(min = 8, max = 16)
     private String password;
@@ -45,14 +46,17 @@ public class Register {
 
     @Schema(
             type = "string",
-            description = "телефон пользователя"
+            description = "телефон пользователя",
+            pattern = "\\+7\\s?\\(?\\d{3}\\)?\\s?\\d{3}-?\\d{2}-?\\d{2}",
+            example = "string"
     )
-    @Pattern(regexp = "\\+7\\s?\\(?\\d{3}\\)?\\s?\\d{3}-?\\d{2}-?\\d{2}")
+//    @Pattern(regexp = "\\+7\\s?\\(?\\d{3}\\)?\\s?\\d{3}-?\\d{2}-?\\d{2}")
     private String phone;
 
     @Schema(
             type = "string",
-            description = "роль пользователя"
+            description = "роль пользователя",
+            example = "USER"
     )
     private Role role;
 }

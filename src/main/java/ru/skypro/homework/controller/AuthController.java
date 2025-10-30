@@ -18,7 +18,6 @@ import ru.skypro.homework.service.AuthService;
 @RequiredArgsConstructor
 @RestController
 @Tag(name = "Авторизация", description = "Методы для авторизации пользователя")
-
 public class AuthController {
     private AuthService authService;
 
@@ -32,12 +31,6 @@ public class AuthController {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
-    public ResponseEntity<String> login(@RequestBody Login login) {
-        if (authService.login(login)) {
-            return ResponseEntity.ok("Авторизация успешна");
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Неверные данные");
-        }
+    public void login(@RequestBody Login login) {
     }
-
 }
