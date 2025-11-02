@@ -12,19 +12,20 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Schema(description = "Модель данных для смены пароля")
-public class NewPassword {
+@Schema(description = "Модель данных для логина и пароля")
+public class LoginDto {
     @Schema(
             type = "string",
-            description = "текущий пароль"
+            description = "пароль",
+            example = "stringst"
     )
     @Size(min = 8, max = 16)
-    private String currentPassword;
+    private String password;
 
     @Schema(
             type = "string",
-            description = "новый пароль"
+            description = "логин"
     )
-    @Size(min = 8, max = 16)
-    private String newPassword;
+    @Size(min = 4, max = 32)
+    private String username;
 }

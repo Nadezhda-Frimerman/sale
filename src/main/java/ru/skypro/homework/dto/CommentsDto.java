@@ -12,7 +12,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @Builder
 @Schema(description = "Модель данных нескольких комментариев")
-public class Comments {
+public class CommentsDto {
     @Schema(
             type = "integer",
             format = "int32",
@@ -23,5 +23,5 @@ public class Comments {
     @Schema(
             type = "array"
     )
-    private Collection<Comment> results = new ArrayList<>();
+    private Collection<CommentDto> results = new ArrayList<>();
 }

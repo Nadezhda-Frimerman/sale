@@ -1,0 +1,52 @@
+package ru.skypro.homework.mapper;
+
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.springframework.util.StringUtils;
+import ru.skypro.homework.dto.RegisterDto;
+import ru.skypro.homework.dto.UpdateUserDto;
+import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.entity.User;
+
+@Mapper(componentModel = "spring", uses = UserMapper.class)
+public interface UserMapper {
+    /**
+     * User <---> UserDto
+     *
+     */
+    @Mapping(target = "ads", expression = "java(new java.util.ArrayList<>())")
+    @Mapping(target = "comments", expression = "java(new java.util.ArrayList<>())")
+    User UserDtoToUserEntity(UserDto userDto);
+
+    UserDto UserToUserDto(User user);
+
+    /**
+     * User <--- UpdateUser
+     * Мне кажется, что обратный маппинг не имеет смысла
+     */
+    default void safeUpdateUserDtoToUserEntity(UpdateUserDto updateUserDto, @MappingTarget User user) {
+        if (updateUserDto == null) {
+            return;
+        }
+
+        if (StringUtils.hasText(updateUserDto.getFirstName())) {
+            user.setFirstName(updateUserDto.getFirstName());
+        }
+
+        if (StringUtils.hasText(updateUserDto.getLastName())) {
+            user.setLastName(updateUserDto.getLastName());
+        }
+
+        if (StringUtils.hasText(updateUserDto.getPhone())) {
+            user.setPhone(updateUserDto.getPhone());
+        }
+    }
+
+    /**
+     * RegisterDto ---> User
+     * Опять же обратное не имеет смысла
+     */
+    @Mapping(target = "email", source = "username")
+    User RegisterDtoToUserEntity(RegisterDto registerDto);
+}

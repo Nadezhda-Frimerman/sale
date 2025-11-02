@@ -8,10 +8,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.NewPassword;
-import ru.skypro.homework.dto.UpdateUser;
-import ru.skypro.homework.dto.User;
+import ru.skypro.homework.dto.NewPasswordDto;
+import ru.skypro.homework.dto.UpdateUserDto;
+import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.entity.User;
+import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.service.impl.UsersServiceImpl;
+
+import javax.validation.Valid;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -29,7 +33,7 @@ public class UsersController {
     @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "403", description = "Forbidden")
-    public void setPassword(@RequestBody NewPassword newPassword) {
+    public void setPassword(@RequestBody NewPasswordDto newPasswordDto) {
     }
 
     @GetMapping("/me")
@@ -38,8 +42,8 @@ public class UsersController {
             tags = {"Пользователи"})
     @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
-    public User getUser() {
-        return new User();
+    public UserDto getUser() {
+        return new UserDto();
     }
 
     @PatchMapping("/me")
@@ -48,8 +52,8 @@ public class UsersController {
             tags = {"Пользователи"})
     @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
-    public UpdateUser updateUser(@RequestBody UpdateUser updateUser) {
-        return new UpdateUser();
+    public UpdateUserDto updateUser(@RequestBody UpdateUserDto updateUserDto) {
+        return new UpdateUserDto();
     }
 
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

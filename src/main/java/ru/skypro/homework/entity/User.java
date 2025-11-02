@@ -8,10 +8,8 @@ import lombok.NoArgsConstructor;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @Entity
 @Table(name = "user_data")
@@ -46,7 +44,7 @@ public class User {
     private String image;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private Collection<Ad> ads;
+    private Collection<Ad> ads = new ArrayList<>();
 
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
     private Collection<Comment> comments = new ArrayList<>();

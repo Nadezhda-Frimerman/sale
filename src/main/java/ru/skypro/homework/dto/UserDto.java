@@ -11,11 +11,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Schema(description = "Модель данных пользователя")
-public class User {
+public class UserDto {
     @Schema(
             type = "integer",
             format = "int32",
             description = "id пользователя"
+//            accessMode = Schema.AccessMode.READ_ONLY
     )
     private Integer id;
 
