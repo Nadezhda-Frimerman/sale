@@ -9,6 +9,8 @@ import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -18,26 +20,34 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Schema(description = "Модель данных пользователя")
-
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    /**
+     * login = email
+     */
     private String email;
-    @Size(min = 8, max = 16)
+
     private String password;
 
+    @Column(name = "first_name")
     private String firstName;
 
+    @Column(name = "last_name")
     private String lastName;
 
     private String phone;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     private String image;
+
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<Ad> ads;
+    private Collection<Ad> ads;
+
+    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
+    private Collection<Comment> comments = new ArrayList<>();
 }

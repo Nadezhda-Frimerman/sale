@@ -9,9 +9,11 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
+@Table(name = "ads")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,6 +31,7 @@ public class Ad {
 
     @Size(min = 8, max = 64)
     private String description;
+
     @ManyToOne
     @JoinColumn(name="user_id")
     private User user;
@@ -36,6 +39,6 @@ public class Ad {
     private String image;
 
     @OneToMany(mappedBy = "ad", fetch = FetchType.LAZY)
-    private List<Comment> comments;
+    private Collection<Comment> comments;
 
 }

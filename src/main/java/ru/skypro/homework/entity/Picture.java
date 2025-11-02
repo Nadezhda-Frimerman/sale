@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 
 @Entity
+@Table(name = "pictures")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,14 +19,17 @@ import javax.validation.constraints.Size;
 public class Picture {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Integer id;
 
+    @Column(name = "file_path", nullable = false)
     private String filePath;
 
+    @Column(name = "file_size", nullable = false)
     private long fileSize;
 
-    private  String mediaType;
+    @Column(name = "media_type", nullable = false, length = 100)
+    private String mediaType;
+
     @Lob
     @JsonIgnore
     private byte[] data;
