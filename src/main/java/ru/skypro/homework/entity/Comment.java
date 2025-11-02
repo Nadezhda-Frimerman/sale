@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -20,16 +17,11 @@ import javax.validation.constraints.Size;
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Schema(
-            type = "integer",
-            format = "int32",
-            description = "id объявления"
-    )
-    private Integer id;
-    @Schema(
-            type = "string",
-            description = "текст комментария"
-    )
+        private Integer id;
+
     @Size(min = 8, max = 64)
     private String content;
+    @ManyToOne
+    @JoinColumn(name="ad_id")
+    private Ad ad;
 }

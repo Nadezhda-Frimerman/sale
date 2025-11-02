@@ -8,9 +8,11 @@ import lombok.NoArgsConstructor;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
+import java.util.List;
 
 @Entity
-@Table(name = "app_user")
+@Table(name = "user_data")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,47 +22,22 @@ import javax.persistence.*;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Schema(
-            type = "integer",
-            format = "int32",
-            description = "id пользователя"
-    )
     private Integer id;
 
-    @Schema(
-            type = "string",
-            description = "логин пользователя"
-    )
     private String email;
+    @Size(min = 8, max = 16)
+    private String password;
 
-    @Schema(
-            type = "string",
-            description = "имя пользователя"
-    )
     private String firstName;
 
-    @Schema(
-            type = "string",
-            description = "фамилия пользователя"
-    )
     private String lastName;
 
-    @Schema(
-            type = "string",
-            description = "телефон пользователя"
-    )
     private String phone;
 
-    @Schema(
-            type = "string",
-            description = "роль пользователя"
-    )
     @Enumerated
     private Role role;
 
-    @Schema(
-            type = "string",
-            description = "ссылка на аватар пользователя"
-    )
     private String image;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Ad> ads;
 }
