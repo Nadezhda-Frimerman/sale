@@ -8,59 +8,46 @@ import lombok.NoArgsConstructor;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
-@Table(name = "app_user")
+@Table(name = "user_data")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Schema(description = "Модель данных пользователя")
-
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Schema(
-            type = "integer",
-            format = "int32",
-            description = "id пользователя"
-    )
     private Integer id;
 
-    @Schema(
-            type = "string",
-            description = "логин пользователя"
-    )
+    /**
+     * login = email
+     */
     private String email;
 
-    @Schema(
-            type = "string",
-            description = "имя пользователя"
-    )
+    private String password;
+
+    @Column(name = "first_name")
     private String firstName;
 
-    @Schema(
-            type = "string",
-            description = "фамилия пользователя"
-    )
+    @Column(name = "last_name")
     private String lastName;
 
-    @Schema(
-            type = "string",
-            description = "телефон пользователя"
-    )
     private String phone;
 
-    @Schema(
-            type = "string",
-            description = "роль пользователя"
-    )
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Schema(
-            type = "string",
-            description = "ссылка на аватар пользователя"
-    )
     private String image;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private Collection<Ad> ads;
+
+    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
+    private Collection<Comment> comments = new ArrayList<>();
 }

@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 
 @Entity
+@Table(name = "pictures")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,36 +19,19 @@ import javax.validation.constraints.Size;
 public class Picture {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Schema(
-            type = "integer",
-            format = "int32",
-            description = "id объявления"
-    )
     private Integer id;
-    @Schema(
-            type = "string",
-            format = "uri",
-            description = "URL путь к файлу"
-    )
+
+    @Column(name = "file_path", nullable = false)
     private String filePath;
-    @Schema(
-            type = "integer",
-            format = "int64",
-            description = "размер файла в байтах"
-    )
+
+    @Column(name = "file_size", nullable = false)
     private long fileSize;
-    @Schema(
-            type = "string",
-            description = "тип файла MIME"
-    )
-    private  String mediaType;
+
+    @Column(name = "media_type", nullable = false, length = 100)
+    private String mediaType;
+
     @Lob
     @JsonIgnore
-    @Schema(
-            type = "string",
-            format = "byte",
-            description = "массив байтов - картинка, закодирована в base64"
-    )
     private byte[] data;
 
 }
