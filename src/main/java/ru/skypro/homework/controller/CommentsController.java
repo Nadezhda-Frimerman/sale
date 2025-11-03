@@ -6,10 +6,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.Comment;
-import ru.skypro.homework.dto.Comments;
-import ru.skypro.homework.dto.CreateOrUpdateAd;
-import ru.skypro.homework.dto.CreateOrUpdateComment;
+import ru.skypro.homework.dto.CommentDto;
+import ru.skypro.homework.dto.CommentsDto;
+import ru.skypro.homework.dto.CreateOrUpdateCommentDto;
 import ru.skypro.homework.service.impl.CommentsServiceImpl;
 
 @Slf4j
@@ -28,8 +27,8 @@ public class CommentsController {
     @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "404", description = "Not found")
-    public Comments getComments(@PathVariable(name = "id") Integer id) {
-        return new Comments();
+    public CommentsDto getComments(@PathVariable(name = "id") Integer id) {
+        return new CommentsDto();
     }
 
     @PostMapping("/{id}/comments")
@@ -39,9 +38,9 @@ public class CommentsController {
     @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "404", description = "Not found")
-    public Comment addComment(@PathVariable(name = "id") Integer id,
-                              @RequestBody CreateOrUpdateComment createOrUpdateComment) {
-        return new Comment();
+    public CommentDto addComment(@PathVariable(name = "id") Integer id,
+                                 @RequestBody CreateOrUpdateCommentDto createOrUpdateCommentDto) {
+        return new CommentDto();
     }
 
     @DeleteMapping("/{adId}/comments/{commentId}")
@@ -64,9 +63,9 @@ public class CommentsController {
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "403", description = "Forbidden")
     @ApiResponse(responseCode = "404", description = "Not found")
-    public Comment updateComment(@PathVariable(name = "adId") Integer adId,
-                                 @PathVariable(name = "commentId") Integer commentId,
-                                 @RequestBody CreateOrUpdateComment createOrUpdateComment) {
-        return new Comment();
+    public CommentDto updateComment(@PathVariable(name = "adId") Integer adId,
+                                    @PathVariable(name = "commentId") Integer commentId,
+                                    @RequestBody CreateOrUpdateCommentDto createOrUpdateCommentDto) {
+        return new CommentDto();
     }
 }

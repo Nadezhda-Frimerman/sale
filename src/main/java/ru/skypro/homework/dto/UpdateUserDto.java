@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @Builder
 @Schema(description = "Модель данных для внесения изменений в данные пользователя")
-public class UpdateUser {
+public class UpdateUserDto {
     @Schema(
             type = "string",
             description = "имя пользователя"

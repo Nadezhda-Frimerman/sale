@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.skypro.homework.entity.Role;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -14,7 +16,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @Builder
 @Schema(description = "Модель данных для регистрации нового пользователя")
-public class Register {
+public class RegisterDto {
     @Schema(
             type = "string",
             description = "логин"
@@ -24,8 +26,7 @@ public class Register {
 
     @Schema(
             type = "string",
-            description = "пароль",
-            example = "stringst"
+            description = "пароль"
     )
     @Size(min = 8, max = 16)
     private String password;
@@ -50,7 +51,8 @@ public class Register {
             pattern = "\\+7\\s?\\(?\\d{3}\\)?\\s?\\d{3}-?\\d{2}-?\\d{2}",
             example = "string"
     )
-//    @Pattern(regexp = "\\+7\\s?\\(?\\d{3}\\)?\\s?\\d{3}-?\\d{2}-?\\d{2}")
+    @Pattern(regexp = "\\+7\\s?\\(?\\d{3}\\)?\\s?\\d{3}-?\\d{2}-?\\d{2}")
+    @NotBlank
     private String phone;
 
     @Schema(

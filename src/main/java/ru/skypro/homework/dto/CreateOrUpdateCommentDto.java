@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @Builder
 @Schema(description = "Модель данных для создания или обновления комментария")
-public class CreateOrUpdateComment {
+public class CreateOrUpdateCommentDto {
     @NotNull
     @Schema(requiredMode = Schema.RequiredMode.REQUIRED,
     type = "string",

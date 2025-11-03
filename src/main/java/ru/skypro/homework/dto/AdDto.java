@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Schema(description = "Модель данных рекламного объявления")
-public class Ad {
+public class AdDto {
     @Schema(
             type = "integer",
             format = "int32",
