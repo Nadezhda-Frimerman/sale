@@ -13,10 +13,8 @@ import ru.skypro.homework.entity.User;
 public interface UserMapper {
     /**
      * User <---> UserDto
-     *
      */
-//    @Mapping(target = "ads", expression = "java(new java.util.ArrayList<>())")
-//    @Mapping(target = "comments", expression = "java(new java.util.ArrayList<>())")
+
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "ads", ignore = true)
     @Mapping(target = "comments", ignore = true)
@@ -28,7 +26,6 @@ public interface UserMapper {
 
     /**
      * User <--- UpdateUser
-     * Мне кажется, что обратный маппинг не имеет смысла
      */
     default void safeUpdateUserDtoToUserEntity(UpdateUserDto updateUserDto, @MappingTarget User user) {
         if (updateUserDto == null) {

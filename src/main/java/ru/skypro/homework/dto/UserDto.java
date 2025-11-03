@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.skypro.homework.entity.Role;
 
 @Data
 @AllArgsConstructor
@@ -16,7 +17,7 @@ public class UserDto {
             type = "integer",
             format = "int32",
             description = "id пользователя"
-//            accessMode = Schema.AccessMode.READ_ONLY
+
     )
     private Integer id;
 
