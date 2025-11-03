@@ -3,7 +3,7 @@ package ru.skypro.homework.mapper;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 import ru.skypro.homework.dto.RegisterDto;
-import ru.skypro.homework.dto.Role;
+import ru.skypro.homework.entity.Role;
 import ru.skypro.homework.dto.UpdateUserDto;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.entity.User;

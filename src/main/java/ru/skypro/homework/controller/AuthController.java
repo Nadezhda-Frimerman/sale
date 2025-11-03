@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.skypro.homework.dto.LoginDto;
 import ru.skypro.homework.service.AuthService;
 
+import javax.validation.Valid;
+
 @CrossOrigin(value = "http://localhost:3000")
 @RequiredArgsConstructor
 @RestController

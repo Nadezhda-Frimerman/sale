@@ -14,15 +14,10 @@ public interface AdMapper {
     /**
      * Ad <---> AdDto
      */
-//    @Mapping(target = "id", source = "adDto.pk")
-//    @Mapping(target = "user", source = "user")
-//    @Mapping(target = "comments", ignore = true)
-//    Ad AdDtoToAdEntity(AdDto adDto, User user);
 
-//    @Mapping(target = "description", ignore = true)
     @Mapping(target = "pk", source = "id")
     @Mapping(target = "author", source = "user.id")
-//    @Mapping(source = "image", target = "image")
+
     AdDto AdToAdDto(Ad ad);
 
     /**
@@ -35,13 +30,6 @@ public interface AdMapper {
     @Mapping(source = "user.phone", target = "phone")
 //    @Mapping(source = "image", target = "image")
     ExtendedAdDto AdtoExtendedAdDto(Ad ad);
-
-
-//    @Mapping(target = "id", source = "extendedAdDto.pk")
-//    @Mapping(target = "user", source = "user")
-//    @Mapping(target = "comments", ignore = true)
-//    @Mapping(target = "image", source = "extendedAdDto.image")
-//    Ad ExtendedAdDtoToAdEntity(ExtendedAdDto extendedAdDto, User user);
 
     /**
       * List<Ad> -> List<AdDto>
