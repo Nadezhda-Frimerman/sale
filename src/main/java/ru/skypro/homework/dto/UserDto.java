@@ -5,17 +5,19 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.skypro.homework.entity.Role;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Schema(description = "Модель данных пользователя")
-public class User {
+public class UserDto {
     @Schema(
             type = "integer",
             format = "int32",
             description = "id пользователя"
+
     )
     private Integer id;
 

@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @Builder
 @Schema(description = "Модель данных для создания или обновления рекламного объявления")
-public class CreateOrUpdateAd {
+public class CreateOrUpdateAdDto {
     @Schema(
             type = "string",
             description = "заголовок объявления"

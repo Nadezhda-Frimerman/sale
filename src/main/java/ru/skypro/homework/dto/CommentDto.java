@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Schema(description = "Модель данных комментария")
-public class Comment {
+public class CommentDto {
     @Schema(
             type = "integer",
             format = "int32",

@@ -14,7 +14,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @Builder
 @Schema(description = "Модель данных нескольких рекламных объявлений")
-public class Ads {
+public class AdsDto {
     @Schema(
             type = "integer",
             format = "int32",
@@ -25,5 +25,5 @@ public class Ads {
     @Schema(
             type = "array"
     )
-    private Collection<Ad> results = new ArrayList<>();
+    private Collection<AdDto> results = new ArrayList<>();
 }

@@ -6,8 +6,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.Register;
+import ru.skypro.homework.dto.RegisterDto;
 import ru.skypro.homework.service.impl.RegisterServiceImpl;
+
+import javax.validation.Valid;
 
 
 @CrossOrigin(value = "http://localhost:3000")
@@ -15,7 +17,7 @@ import ru.skypro.homework.service.impl.RegisterServiceImpl;
 @RequiredArgsConstructor
 @Tag(name = "Регистрация", description = "Методы для регистрации пользователя")
 public class RegisterController {
-    private RegisterServiceImpl registerServiceImpl;
+    private final RegisterServiceImpl registerServiceImpl;
 
     @PostMapping("/register")
     @Operation(
@@ -27,8 +29,7 @@ public class RegisterController {
             @ApiResponse(responseCode = "201", description = "Created"),
             @ApiResponse(responseCode = "400", description = "Bad Request")
     })
-    public void register(@RequestBody Register register) {
+    public void register(@Valid @RequestBody RegisterDto registerDto) {
     }
-
 }
 
