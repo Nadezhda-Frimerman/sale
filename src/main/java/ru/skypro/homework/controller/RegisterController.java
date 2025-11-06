@@ -17,7 +17,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @Tag(name = "Регистрация", description = "Методы для регистрации пользователя")
 public class RegisterController {
-    private final RegisterServiceImpl registerServiceImpl;
+    private final RegisterServiceImpl registerService;
 
     @PostMapping("/register")
     @Operation(

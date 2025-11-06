@@ -5,10 +5,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
-import ru.skypro.homework.service.impl.AdsServiceImpl;
+import ru.skypro.homework.service.impl.AdServiceImpl;
 
 import javax.validation.Valid;
 
@@ -18,8 +19,8 @@ import javax.validation.Valid;
 @RequestMapping("/ads")
 @RequiredArgsConstructor
 @Tag(name = "Объявления", description = "Методы для работы с рекламными объявлениями")
-public class AdsController {
-    private AdsServiceImpl adsServiceImpl;
+public class AdController {
+    private AdServiceImpl adService;
 
     @GetMapping
     @Operation(operationId = "getAllAds",
@@ -31,6 +32,7 @@ public class AdsController {
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasRole('USER')")
     @Operation(operationId = "addAd",
             summary = "Добавление объявления",
             tags = {"Объявления"})
@@ -53,6 +55,7 @@ public class AdsController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or @adService.getAdById(#id).author.email == authentication.name")
     @Operation(operationId = "removeAd",
             summary = "Удаление объявления",
             tags = {"Объявления"})
@@ -64,6 +67,7 @@ public class AdsController {
     }
 
     @PatchMapping("/{id}")
+    @PreAuthorize("@adService.getAdById(#id).author.email == authentication.name")
     @Operation(operationId = "updateAds",
             summary = "Обновление информации об объявлении",
             tags = {"Объявления"})
@@ -77,6 +81,7 @@ public class AdsController {
     }
 
     @GetMapping("/me")
+    @PreAuthorize("hasRole('USER')")
     @Operation(operationId = "getAdsMe",
             summary = "Получение объявлений авторизованного пользователя",
             tags = {"Объявления"})
@@ -87,6 +92,7 @@ public class AdsController {
     }
 
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("@adService.getAdById(#id).author.email == authentication.name")
     @Operation(operationId = "updateImage",
             summary = "Обновление картинки объявления",
             tags = {"Объявления"})

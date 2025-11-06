@@ -5,11 +5,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.dto.CommentsDto;
 import ru.skypro.homework.dto.CreateOrUpdateCommentDto;
-import ru.skypro.homework.service.impl.CommentsServiceImpl;
+import ru.skypro.homework.service.impl.CommentServiceImpl;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -17,8 +18,8 @@ import ru.skypro.homework.service.impl.CommentsServiceImpl;
 @RequestMapping("/ads")
 @RequiredArgsConstructor
 @Tag(name = "Комментарии", description = "Методы для работы с комментариями")
-public class CommentsController {
-    private final CommentsServiceImpl commentsService;
+public class CommentController {
+    private final CommentServiceImpl commentService;
 
     @GetMapping("/{id}/comments")
     @Operation(operationId = "getComments",
@@ -32,6 +33,7 @@ public class CommentsController {
     }
 
     @PostMapping("/{id}/comments")
+    @PreAuthorize("hasRole('USER')")
     @Operation(operationId = "addComment",
             summary = "Добавление комментария к объявлению",
             tags = {"Комментарии"})
@@ -44,6 +46,7 @@ public class CommentsController {
     }
 
     @DeleteMapping("/{adId}/comments/{commentId}")
+    @PreAuthorize("hasRole('ADMIN') or @commentService.getCommentById(#commentId).author.email == authentication.name")
     @Operation(operationId = "deleteComment",
             summary = "Удаление комментария",
             tags = {"Комментарии"})
@@ -56,6 +59,7 @@ public class CommentsController {
     }
 
     @PatchMapping("/{adId}/comments/{commentId}")
+    @PreAuthorize("@commentService.getCommentById(#commentId).author.email == authentication.name")
     @Operation(operationId = "updateComment",
             summary = "Обновление комментария",
             tags = {"Комментарии"})
