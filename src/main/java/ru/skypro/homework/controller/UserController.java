@@ -6,16 +6,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDto;
 import ru.skypro.homework.dto.UpdateUserDto;
 import ru.skypro.homework.dto.UserDto;
-import ru.skypro.homework.entity.User;
-import ru.skypro.homework.mapper.UserMapper;
-import ru.skypro.homework.service.impl.UsersServiceImpl;
-
-import javax.validation.Valid;
+import ru.skypro.homework.service.impl.UserServiceImpl;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -23,10 +20,11 @@ import javax.validation.Valid;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 @Tag(name = "Пользователи", description = "Методы для получения и изменения информации пользователя")
-public class UsersController {
-    private final UsersServiceImpl usersService;
+public class UserController {
+    private final UserServiceImpl userService;
 
     @PostMapping("/set_password")
+    @PreAuthorize("hasRole('USER')")
     @Operation(operationId = "setPassword",
             summary = "Обновление пароля",
             tags = {"Пользователи"})
@@ -34,9 +32,11 @@ public class UsersController {
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "403", description = "Forbidden")
     public void setPassword(@RequestBody NewPasswordDto newPasswordDto) {
+//        userService.setPassword(newPasswordDto, authentication.getName());
     }
 
     @GetMapping("/me")
+    @PreAuthorize("hasRole('USER')")
     @Operation(operationId = "getUser",
             summary = "Получение информации об авторизованном пользователе",
             tags = {"Пользователи"})
@@ -47,6 +47,7 @@ public class UsersController {
     }
 
     @PatchMapping("/me")
+    @PreAuthorize("hasRole('USER')")
     @Operation(operationId = "updateUser",
             summary = "Обновление информации об авторизованном пользователе",
             tags = {"Пользователи"})
@@ -57,6 +58,7 @@ public class UsersController {
     }
 
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasRole('USER')")
     @Operation(operationId = "updateUserImage",
             summary = "Обновление аватара авторизованного пользователя",
             tags = {"Пользователи"})
