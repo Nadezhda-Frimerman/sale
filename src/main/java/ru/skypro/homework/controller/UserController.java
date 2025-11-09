@@ -21,7 +21,7 @@ import ru.skypro.homework.service.impl.UserServiceImpl;
 @RequiredArgsConstructor
 @Tag(name = "Пользователи", description = "Методы для получения и изменения информации пользователя")
 public class UserController {
-    private final UserServiceImpl userService;
+    private final UserServiceImpl userServiceImpl;
 
     @PostMapping("/set_password")
     @PreAuthorize("hasRole('USER')")
@@ -32,7 +32,7 @@ public class UserController {
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "403", description = "Forbidden")
     public void setPassword(@RequestBody NewPasswordDto newPasswordDto) {
-//        userService.setPassword(newPasswordDto, authentication.getName());
+        userServiceImpl.setPassword(newPasswordDto);
     }
 
     @GetMapping("/me")
@@ -43,7 +43,7 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     public UserDto getUser() {
-        return new UserDto();
+        return userServiceImpl.getCurrentUserInformation();
     }
 
     @PatchMapping("/me")

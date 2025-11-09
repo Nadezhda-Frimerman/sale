@@ -1,5 +1,7 @@
 package ru.skypro.homework.service;
 
-public interface RegisterService {
+import ru.skypro.homework.dto.RegisterDto;
 
+public interface RegisterService {
+    void registerUser (RegisterDto registerDto);
 }

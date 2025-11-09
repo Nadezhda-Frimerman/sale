@@ -32,6 +32,7 @@ public class AuthController {
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     public void login(@RequestBody LoginDto loginDto) {
+        authService.login(loginDto);
     }
 
 }

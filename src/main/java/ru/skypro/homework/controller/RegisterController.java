@@ -17,7 +17,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @Tag(name = "Регистрация", description = "Методы для регистрации пользователя")
 public class RegisterController {
-    private final RegisterServiceImpl registerService;
+    private final RegisterServiceImpl registerServiceImpl;
 
     @PostMapping("/register")
     @Operation(
@@ -30,6 +30,7 @@ public class RegisterController {
             @ApiResponse(responseCode = "400", description = "Bad Request")
     })
     public void register(@Valid @RequestBody RegisterDto registerDto) {
+        registerServiceImpl.registerUser(registerDto);
     }
 }
 

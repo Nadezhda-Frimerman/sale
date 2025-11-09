@@ -23,7 +23,7 @@ public interface UserMapper {
     User UserDtoToUserEntity(UserDto userDto);
 
     UserDto UserToUserDto(User user);
-
+    UpdateUserDto UserToUpdateUserDto (User user);
     /**
      * User <--- UpdateUser
      */

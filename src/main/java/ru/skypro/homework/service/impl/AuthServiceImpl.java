@@ -1,31 +1,35 @@
 package ru.skypro.homework.service.impl;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import ru.skypro.homework.dto.LoginDto;
 import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.service.MyUserDetailsManager;
 
 @Service
 public class AuthServiceImpl implements AuthService {
 
-//    private final UserDetailsManager manager;
-//    private final PasswordEncoder encoder;
-//
-//    public AuthServiceImpl(UserDetailsManager manager,
-//                           PasswordEncoder passwordEncoder) {
-//        this.manager = manager;
-//        this.encoder = passwordEncoder;
-//    }
+    private final MyUserDetailsManager myUserDetailsManager;
+    private final PasswordEncoder encoder;
 
-    @Override
-    public boolean login(LoginDto loginDto) {
-//        if (!manager.userExists(username)) {
-//            return false;
-//        }
-//        UserDetails userDetails = manager.loadUserByUsername(username);
-//        return encoder.matches(password, userDetails.getPassword());
-        return true;
+    public AuthServiceImpl(MyUserDetailsManager myUserDetailsManager,
+                           PasswordEncoder passwordEncoder) {
+        this.myUserDetailsManager = myUserDetailsManager;
+        this.encoder = passwordEncoder;
     }
 
+    @Override
+    public void login(LoginDto loginDto) {
+        if (myUserDetailsManager.userExists(loginDto.getUsername())) {
+            UserDetails userDetails = myUserDetailsManager.loadUserByUsername(loginDto.getUsername());
+            encoder.matches(loginDto.getPassword(), userDetails.getPassword());
+        }
+        else {throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
 
+    }
 
 }

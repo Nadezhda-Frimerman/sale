@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
+import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.entity.Role;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.repository.UserRepository;
@@ -16,6 +17,7 @@ import ru.skypro.homework.repository.UserRepository;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MyUserDetailsManager implements UserDetailsManager {
@@ -103,5 +105,10 @@ public class MyUserDetailsManager implements UserDetailsManager {
                 .map(Role::valueOf)
                 .findFirst()
                 .orElse(Role.USER);
+    }
+    public User getCurrentUser (){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails u = (UserDetails) authentication.getDetails();
+        return userRepository.findByEmail(u.getUsername()).get();
     }
 }
