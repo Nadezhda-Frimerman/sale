@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.skypro.homework.entity.Role;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -60,5 +62,6 @@ public class RegisterDto {
             description = "роль пользователя",
             example = "USER"
     )
+
     private Role role;
 }

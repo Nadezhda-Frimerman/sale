@@ -22,6 +22,7 @@ public class AdServiceImpl implements AdService {
         this.adRepository = adRepository;
         this.adMapper = adMapper;
     }
+    @Override
     public AdsDto getAllAds (){
         List<Ad> ads = adRepository.findAll();
         List <AdDto> allAds = adMapper.AdListToAdDtoList(ads);
@@ -30,13 +31,12 @@ public class AdServiceImpl implements AdService {
         adsDto.setCount(allAds.size());
         return adsDto;
     }
-
+    @Override
     public ExtendedAdDto getAdById (Integer id){
         Optional<Ad> ad = adRepository.findById(id);
+
         return adMapper.AdtoExtendedAdDto(ad.orElseThrow());
     }
-    public Ad getAdBy(Integer adId) {
-        return adRepository.findById(adId)
-                .orElseThrow(() -> new EntityNotFoundException("Ad not found"));
-    }
+
+
 }

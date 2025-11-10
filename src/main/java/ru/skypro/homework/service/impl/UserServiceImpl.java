@@ -33,9 +33,6 @@ public class UserServiceImpl implements UserService {
     public void setPassword (NewPasswordDto newPasswordDto){
         checkUserAuthenticated();
         if (!encoder.matches(myUserDetailsManager.getCurrentUser().getPassword(), newPasswordDto.getCurrentPassword())){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        }
-        if (newPasswordDto.getNewPassword().length()<8 || newPasswordDto.getNewPassword().length()>16){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
         String encodedNewPassword = encoder.encode(newPasswordDto.getNewPassword());

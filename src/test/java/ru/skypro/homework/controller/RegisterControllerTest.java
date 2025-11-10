@@ -11,7 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.skypro.homework.dto.RegisterDto;
 import ru.skypro.homework.entity.Role;
-import ru.skypro.homework.service.impl.RegisterServiceImpl;
+import ru.skypro.homework.service.impl.AuthServiceImpl;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -23,7 +23,7 @@ public class RegisterControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private RegisterServiceImpl registerServiceImpl; // мок сервиса
+    private AuthServiceImpl authServiceImpl; // мок сервиса
 
     @Autowired
     private ObjectMapper objectMapper;

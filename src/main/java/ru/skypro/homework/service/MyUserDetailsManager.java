@@ -24,6 +24,11 @@ public class MyUserDetailsManager implements UserDetailsManager {
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
 
+    public MyUserDetailsManager(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
     @Override
     public void createUser(UserDetails userDetails) {
         if (userExists(userDetails.getUsername())) {
