@@ -38,5 +38,4 @@ public class AdServiceImpl implements AdService {
         return adMapper.AdtoExtendedAdDto(ad.orElseThrow());
     }
 
-
 }
