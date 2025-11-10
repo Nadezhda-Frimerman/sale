@@ -25,7 +25,7 @@ public class AuthServiceImpl implements AuthService {
     public void login(LoginDto loginDto) {
         if (myUserDetailsManager.userExists(loginDto.getUsername())) {
             UserDetails userDetails = myUserDetailsManager.loadUserByUsername(loginDto.getUsername());
-            encoder.matches(loginDto.getPassword(), userDetails.getPassword());
+            encoder.matches(loginDto.getPassword(),userDetails.getPassword());
         }
         else {throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }

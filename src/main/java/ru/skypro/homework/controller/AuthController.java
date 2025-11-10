@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.skypro.homework.dto.LoginDto;
 import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.service.impl.AuthServiceImpl;
 
 import javax.validation.Valid;
 
@@ -19,7 +20,11 @@ import javax.validation.Valid;
 @RestController
 @Tag(name = "Авторизация", description = "Методы для авторизации пользователя")
 public class AuthController {
-    private AuthService authService;
+    private AuthServiceImpl authServiceImpl;
+
+    public AuthController(AuthServiceImpl authServiceImpl) {
+        this.authServiceImpl = authServiceImpl;
+    }
 
     @PostMapping("/login")
     @Operation(
@@ -32,7 +37,7 @@ public class AuthController {
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     public void login(@RequestBody LoginDto loginDto) {
-        authService.login(loginDto);
+        authServiceImpl.login(loginDto);
     }
 
 }
