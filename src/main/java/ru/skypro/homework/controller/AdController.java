@@ -51,7 +51,7 @@ public class AdController {
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "404", description = "Not found")
     public ExtendedAdDto getAds(@PathVariable(name = "id") Integer id) {
-        return new ExtendedAdDto();
+        return adService.getAdById(id);
     }
 
     @DeleteMapping("/{id}")

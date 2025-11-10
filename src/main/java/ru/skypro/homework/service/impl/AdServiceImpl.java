@@ -1,22 +1,41 @@
 package ru.skypro.homework.service.impl;
 
 import org.springframework.stereotype.Service;
+import ru.skypro.homework.dto.AdDto;
+import ru.skypro.homework.dto.AdsDto;
+import ru.skypro.homework.dto.ExtendedAdDto;
 import ru.skypro.homework.entity.Ad;
-import ru.skypro.homework.entity.Comment;
+import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.service.AdService;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AdServiceImpl implements AdService {
-    private final AdRepository adRepository;
+    private AdRepository adRepository;
+    private AdMapper adMapper;
 
-    public AdServiceImpl(AdRepository adRepository) {
+    public AdServiceImpl(AdRepository adRepository,AdMapper adMapper) {
         this.adRepository = adRepository;
+        this.adMapper = adMapper;
+    }
+    public AdsDto getAllAds (){
+        List<Ad> ads = adRepository.findAll();
+        List <AdDto> allAds = adMapper.AdListToAdDtoList(ads);
+        AdsDto adsDto = new AdsDto();
+        adsDto.setResults(allAds);
+        adsDto.setCount(allAds.size());
+        return adsDto;
     }
 
-    public Ad getAdById(Integer adId) {
+    public ExtendedAdDto getAdById (Integer id){
+        Optional<Ad> ad = adRepository.findById(id);
+        return adMapper.AdtoExtendedAdDto(ad.orElseThrow());
+    }
+    public Ad getAdBy(Integer adId) {
         return adRepository.findById(adId)
                 .orElseThrow(() -> new EntityNotFoundException("Ad not found"));
     }
