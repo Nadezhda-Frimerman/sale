@@ -18,10 +18,13 @@ import ru.skypro.homework.service.impl.UserServiceImpl;
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/users")
-@RequiredArgsConstructor
 @Tag(name = "Пользователи", description = "Методы для получения и изменения информации пользователя")
 public class UserController {
     private final UserServiceImpl userServiceImpl;
+
+    public UserController(UserServiceImpl userServiceImpl) {
+        this.userServiceImpl = userServiceImpl;
+    }
 
     @PostMapping("/set_password")
     @PreAuthorize("hasRole('USER')")

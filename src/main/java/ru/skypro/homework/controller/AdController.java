@@ -17,10 +17,13 @@ import javax.validation.Valid;
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads")
-@RequiredArgsConstructor
 @Tag(name = "Объявления", description = "Методы для работы с рекламными объявлениями")
 public class AdController {
-    private AdServiceImpl adService;
+    private AdServiceImpl adServiceImpl;
+
+    public AdController(AdServiceImpl adServiceImpl) {
+        this.adServiceImpl = adServiceImpl;
+    }
 
     @GetMapping
     @Operation(operationId = "getAllAds",
@@ -40,7 +43,7 @@ public class AdController {
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     public AdDto addAd(@RequestPart("properties") @Valid CreateOrUpdateAdDto properties,
                        @RequestPart("image") MultipartFile image) {
-        return new AdDto();
+        return adServiceImpl.addAd(properties);
     }
 
     @GetMapping("/{id}")
@@ -51,7 +54,7 @@ public class AdController {
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "404", description = "Not found")
     public ExtendedAdDto getAds(@PathVariable(name = "id") Integer id) {
-        return adService.getAdById(id);
+        return adServiceImpl.getAdById(id);
     }
 
     @DeleteMapping("/{id}")
@@ -63,7 +66,7 @@ public class AdController {
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "403", description = "Forbidden")
     @ApiResponse(responseCode = "404", description = "Not found")
-    public void removeAd(@PathVariable(name = "id") Integer id) {
+    public void removeAd(@PathVariable(name = "id") Integer id) {adServiceImpl.removeAd(id);
     }
 
     @PatchMapping("/{id}")

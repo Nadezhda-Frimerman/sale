@@ -1,5 +1,6 @@
 package ru.skypro.homework.service;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -9,6 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.entity.Role;
 import ru.skypro.homework.entity.User;
@@ -115,5 +117,11 @@ public class MyUserDetailsManager implements UserDetailsManager {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails u = (UserDetails) authentication.getDetails();
         return userRepository.findByEmail(u.getUsername()).get();
+    }
+    public void checkUserAuthenticated() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
     }
 }

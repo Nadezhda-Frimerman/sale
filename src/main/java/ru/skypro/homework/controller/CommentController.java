@@ -16,10 +16,13 @@ import ru.skypro.homework.service.impl.CommentServiceImpl;
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/ads")
-@RequiredArgsConstructor
 @Tag(name = "Комментарии", description = "Методы для работы с комментариями")
 public class CommentController {
     private final CommentServiceImpl commentService;
+
+    public CommentController(CommentServiceImpl commentService) {
+        this.commentService = commentService;
+    }
 
     @GetMapping("/{id}/comments")
     @Operation(operationId = "getComments",

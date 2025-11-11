@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public void setPassword (NewPasswordDto newPasswordDto){
-        checkUserAuthenticated();
+        myUserDetailsManager.checkUserAuthenticated();
         if (!encoder.matches(myUserDetailsManager.getCurrentUser().getPassword(), newPasswordDto.getCurrentPassword())){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
@@ -42,12 +42,12 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public UserDto getCurrentUserInformation (){
-        checkUserAuthenticated();
+        myUserDetailsManager.checkUserAuthenticated();
         return userMapper.UserToUserDto(myUserDetailsManager.getCurrentUser());
     }
     @Override
     public UpdateUserDto updateUserInformation (UpdateUserDto updateUserDto){
-        checkUserAuthenticated();
+        myUserDetailsManager.checkUserAuthenticated();
         User user = myUserDetailsManager.getCurrentUser();
         user.setFirstName(updateUserDto.getFirstName());
         user.setLastName(updateUserDto.getLastName());
@@ -60,10 +60,5 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(author).orElseThrow();
     }
 
-    public static void checkUserAuthenticated() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        }
-    }
+
 }

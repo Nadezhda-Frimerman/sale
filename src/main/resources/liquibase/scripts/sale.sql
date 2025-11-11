@@ -11,7 +11,7 @@ CREATE TABLE user_data (
     last_name VARCHAR(100) NOT NULL,
     phone VARCHAR(20),
     role ROLE NOT NULL DEFAULT 'USER',
-    image VARCHAR(500)
+    image VARCHAR(500) NOT NULL
 );
 
 CREATE TABLE ads(
@@ -41,4 +41,5 @@ CREATE TABLE pictures(
 );
 -- changeset nfr:3
 ALTER TABLE user_data ALTER COLUMN role TYPE VARCHAR(255);
+ALTER TABLE user_data ALTER COLUMN image DROP NOT NULL;
 
