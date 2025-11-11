@@ -1,21 +1,22 @@
 package ru.skypro.homework.service.impl;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import ru.skypro.homework.dto.NewPasswordDto;
 import ru.skypro.homework.dto.UpdateUserDto;
 import ru.skypro.homework.dto.UserDto;
+import ru.skypro.homework.entity.Picture;
+import ru.skypro.homework.entity.PictureOwner;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.MyUserDetailsManager;
 import ru.skypro.homework.service.UserService;
 
-import java.beans.Encoder;
+import java.io.IOException;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -23,11 +24,13 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
     private MyUserDetailsManager myUserDetailsManager;
     private PasswordEncoder encoder;
+    private PictureServiceImpl pictureServiceImpl;
 
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, MyUserDetailsManager myUserDetailsManager) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, MyUserDetailsManager myUserDetailsManager, PictureServiceImpl pictureServiceImpl) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.myUserDetailsManager = myUserDetailsManager;
+        this.pictureServiceImpl = pictureServiceImpl;
     }
     @Override
     public void setPassword (NewPasswordDto newPasswordDto){
@@ -60,5 +63,10 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(author).orElseThrow();
     }
 
-
+    public void uploadUserPicture(MultipartFile file) throws IOException {
+        Picture picture = pictureServiceImpl.uploadPicture(myUserDetailsManager.getCurrentUser().getId(), PictureOwner.USER,file);
+        User currentUser = myUserDetailsManager.getCurrentUser();
+        currentUser.setImage(picture);
+        userRepository.save(currentUser);
+    }
 }

@@ -44,6 +44,9 @@ public class AuthServiceImpl implements AuthService {
            return false;
        }
        User user = userMapper.RegisterDtoToUserEntity(registerDto);
+//       Додумать
+       String encodedPassword = encoder.encode(registerDto.getPassword());
+       user.setPassword(encodedPassword);
        userRepository.save(user);
        return true;
     }

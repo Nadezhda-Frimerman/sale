@@ -3,18 +3,21 @@ package ru.skypro.homework.service.impl;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.AdsDto;
 import ru.skypro.homework.dto.CreateOrUpdateAdDto;
 import ru.skypro.homework.dto.ExtendedAdDto;
 import ru.skypro.homework.entity.Ad;
+import ru.skypro.homework.entity.Picture;
+import ru.skypro.homework.entity.PictureOwner;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.MyUserDetailsManager;
 
-import javax.persistence.EntityNotFoundException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,11 +27,14 @@ public class AdServiceImpl implements AdService {
     private AdMapper adMapper;
     private MyUserDetailsManager myUserDetailsManager;
     private PasswordEncoder encoder;
-    public AdServiceImpl(AdRepository adRepository, AdMapper adMapper, MyUserDetailsManager myUserDetailsManager, PasswordEncoder encoder) {
+    private final PictureServiceImpl pictureServiceImpl;
+
+    public AdServiceImpl(AdRepository adRepository, AdMapper adMapper, MyUserDetailsManager myUserDetailsManager, PasswordEncoder encoder, PictureServiceImpl pictureServiceImpl) {
         this.adRepository = adRepository;
         this.adMapper = adMapper;
         this.myUserDetailsManager = myUserDetailsManager;
         this.encoder = encoder;
+        this.pictureServiceImpl = pictureServiceImpl;
     }
 //    Получение всех объявлений
     @Override
@@ -65,6 +71,16 @@ public class AdServiceImpl implements AdService {
         adRepository.deleteById(id);
     }
 
+    public Ad findAdById(Integer id) {
+        return adRepository.findById(id).orElseThrow();
+    }
+
+    public void uploadAdPicture(Integer id, MultipartFile file) throws IOException {
+        Picture picture = pictureServiceImpl.uploadPicture(id, PictureOwner.AD,file);
+        Ad currentAd = findAdById(id);
+        currentAd.setImage(picture);
+        adRepository.save(currentAd);
+    }
 //Обновление информации об объявлении
 //Получение объявлений авторизованного пользователяПолучение объявлений авторизованного пользователя
 

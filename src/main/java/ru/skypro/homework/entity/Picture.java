@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
@@ -30,7 +31,11 @@ public class Picture {
     private String mediaType;
 
     @Lob
+    @Type(type = "org.hibernate.type.BinaryType")
     @JsonIgnore
     private byte[] data;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "picture_owner", nullable = false)
+    private PictureOwner pictureOwner;
 }

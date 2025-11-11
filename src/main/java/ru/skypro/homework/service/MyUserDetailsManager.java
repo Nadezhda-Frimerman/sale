@@ -114,9 +114,18 @@ public class MyUserDetailsManager implements UserDetailsManager {
                 .orElse(Role.USER);
     }
     public User getCurrentUser (){
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        UserDetails u = (UserDetails) authentication.getDetails();
+//        return userRepository.findByEmail(u.getUsername()).get();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails u = (UserDetails) authentication.getDetails();
-        return userRepository.findByEmail(u.getUsername()).get();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new RuntimeException("User not authenticated");
+        }
+
+        String username = authentication.getName();
+        return userRepository.findByEmail(username)
+                .orElseThrow(() -> new RuntimeException("User not found: " + username));
     }
     public void checkUserAuthenticated() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

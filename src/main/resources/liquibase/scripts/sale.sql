@@ -37,9 +37,22 @@ CREATE TABLE pictures(
     file_path TEXT NOT NULL,
     file_size BIGINT NOT NULL,
     media_type VARCHAR(100) NOT NULL,
-    data OID NOT NULL
+    data BYTEA NOT NULL
 );
+
 -- changeset nfr:3
 ALTER TABLE user_data ALTER COLUMN role TYPE VARCHAR(255);
 ALTER TABLE user_data ALTER COLUMN image DROP NOT NULL;
 
+-- changeset dlok:4
+ALTER TABLE user_data ADD COLUMN image_id INTEGER REFERENCES pictures(id);
+ALTER TABLE user_data DROP COLUMN image;
+CREATE TYPE OWNER AS ENUM ('USER','AD');
+ALTER TABLE pictures ADD COLUMN picture_owner OWNER NOT NULL;
+
+-- changeset dlok:5
+ALTER TABLE ads ADD COLUMN image_id INTEGER REFERENCES pictures(id);
+ALTER TABLE ads DROP COLUMN image;
+
+-- changeset dlok:6
+ALTER TABLE pictures ALTER COLUMN picture_owner TYPE VARCHAR(255);

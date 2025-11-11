@@ -3,7 +3,6 @@ package ru.skypro.homework.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,6 +12,8 @@ import ru.skypro.homework.dto.NewPasswordDto;
 import ru.skypro.homework.dto.UpdateUserDto;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.service.impl.UserServiceImpl;
+
+import java.io.IOException;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -67,6 +68,7 @@ public class UserController {
             tags = {"Пользователи"})
     @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
-    public void updateUserImage(@RequestParam("image") MultipartFile image) {
+    public void updateUserImage(@RequestParam("image") MultipartFile image) throws IOException {
+        userServiceImpl.uploadUserPicture(image);
     }
 }

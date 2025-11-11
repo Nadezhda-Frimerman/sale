@@ -17,7 +17,7 @@ public interface AdMapper {
 
     @Mapping(target = "pk", source = "id")
     @Mapping(target = "author", source = "user.id")
-
+    @Mapping(target = "image", source = "image.filePath")
     AdDto AdToAdDto(Ad ad);
 
     /**
@@ -28,6 +28,7 @@ public interface AdMapper {
     @Mapping(source = "user.lastName", target = "authorLastName")
     @Mapping(source = "user.email", target = "email")
     @Mapping(source = "user.phone", target = "phone")
+    @Mapping(target = "image", ignore = true)
 //    @Mapping(source = "image", target = "image")
     ExtendedAdDto AdtoExtendedAdDto(Ad ad);
 
@@ -65,7 +66,6 @@ public interface AdMapper {
         ad.setId(adDto.getPk()); // pk -> id
         ad.setTitle(adDto.getTitle());
         ad.setPrice(adDto.getPrice());
-        ad.setImage(adDto.getImage());
         ad.setUser(user);
         // description не маппится, т.к. его нет в AdDto
 
@@ -85,7 +85,6 @@ public interface AdMapper {
         ad.setTitle(extendedAdDto.getTitle());
         ad.setPrice(extendedAdDto.getPrice());
         ad.setDescription(extendedAdDto.getDescription());
-        ad.setImage(extendedAdDto.getImage());
         ad.setUser(user);
 
         return ad;
