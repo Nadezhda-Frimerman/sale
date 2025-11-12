@@ -20,8 +20,10 @@ public interface UserMapper {
     @Mapping(target = "comments", ignore = true)
     @Mapping(target = "password", ignore = true)
     @Mapping(target = "role", ignore = true)
+    @Mapping(target = "image", ignore = true)
     User UserDtoToUserEntity(UserDto userDto);
 
+    @Mapping(target = "image", source = "image.filePath")
     UserDto UserToUserDto(User user);
     UpdateUserDto UserToUpdateUserDto (User user);
     /**

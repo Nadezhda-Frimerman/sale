@@ -80,7 +80,7 @@ public class AdController {
     @ApiResponse(responseCode = "404", description = "Not found")
     public AdDto updateAds(@PathVariable(name = "id") Integer id,
                            @RequestBody CreateOrUpdateAdDto createOrUpdateAdDto) {
-        return new AdDto();
+        return adServiceImpl.updateAd(id, createOrUpdateAdDto);
     }
 
     @GetMapping("/me")
@@ -91,7 +91,7 @@ public class AdController {
     @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     public AdsDto getAdsMe() {
-        return new AdsDto();
+        return adServiceImpl.geyAllMyAds();
     }
 
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

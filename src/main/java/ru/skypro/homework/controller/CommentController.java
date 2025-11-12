@@ -18,10 +18,10 @@ import ru.skypro.homework.service.impl.CommentServiceImpl;
 @RequestMapping("/ads")
 @Tag(name = "Комментарии", description = "Методы для работы с комментариями")
 public class CommentController {
-    private final CommentServiceImpl commentService;
+    private final CommentServiceImpl commentServiceImpl;
 
-    public CommentController(CommentServiceImpl commentService) {
-        this.commentService = commentService;
+    public CommentController(CommentServiceImpl commentService, CommentServiceImpl commentServiceImpl) {
+        this.commentServiceImpl = commentServiceImpl;
     }
 
     @GetMapping("/{id}/comments")
@@ -32,7 +32,7 @@ public class CommentController {
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "404", description = "Not found")
     public CommentsDto getComments(@PathVariable(name = "id") Integer id) {
-        return new CommentsDto();
+        return commentServiceImpl.getAllCommentByAdsId(id);
     }
 
     @PostMapping("/{id}/comments")
@@ -45,7 +45,7 @@ public class CommentController {
     @ApiResponse(responseCode = "404", description = "Not found")
     public CommentDto addComment(@PathVariable(name = "id") Integer id,
                                  @RequestBody CreateOrUpdateCommentDto createOrUpdateCommentDto) {
-        return new CommentDto();
+        return commentServiceImpl.updateComment(id, createOrUpdateCommentDto);
     }
 
     @DeleteMapping("/{adId}/comments/{commentId}")

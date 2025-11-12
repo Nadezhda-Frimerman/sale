@@ -33,4 +33,16 @@ public class Picture {
     @JsonIgnore
     private byte[] data;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "picture_owner", nullable = false)
+    private PictureOwner pictureOwner;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ad_id")
+    private Ad ad;
+
 }

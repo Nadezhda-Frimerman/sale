@@ -1,8 +1,28 @@
 -- liquibase formatted sql
 
 -- changeset dlok:1
-CREATE TYPE ROLE AS ENUM ('USER','ADMIN');
-
+CREATE TABLE pictures(
+    id SERIAL PRIMARY KEY,
+    file_path TEXT NOT NULL,
+    file_size BIGINT NOT NULL,
+    media_type VARCHAR(100) NOT NULL,
+    data BYTEA NOT NULL,
+    pictures_owner VARCHAR(20)
+);
+-- changeset dlok:2
+CREATE TABLE comments(
+    id SERIAL PRIMARY KEY,
+    text VARCHAR(64) NOT NULL,
+    created_at BIGINT NOT NULL
+);
+-- changeset dlok:3
+CREATE TABLE ads(
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(32) NOT NULL,
+    price INTEGER NOT NULL CHECK (price >= 0),
+    description VARCHAR(64) NOT NULL
+);
+-- changeset dlok:4
 CREATE TABLE user_data (
     id SERIAL PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
@@ -10,36 +30,22 @@ CREATE TABLE user_data (
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
     phone VARCHAR(20),
-    role ROLE NOT NULL DEFAULT 'USER',
-    image VARCHAR(500) NOT NULL
+    role VARCHAR(10) NOT NULL DEFAULT 'USER'
 );
-
-CREATE TABLE ads(
-    id SERIAL PRIMARY KEY,
-    title VARCHAR(32) NOT NULL,
-    price INT NOT NULL CHECK (price >= 0),
-    description VARCHAR(64) NOT NULL,
-    image VARCHAR(500) NOT NULL,
-    user_id INT NOT NULL REFERENCES user_data (id)
-);
-
-CREATE TABLE comments(
-    id SERIAL PRIMARY KEY,
-    text VARCHAR(64) NOT NULL,
-    created_at BIGINT NOT NULL,
-    user_id INT NOT NULL REFERENCES user_data (id),
-    ad_id INT NOT NULL REFERENCES ads (id)
-);
-
--- changeset dlok:2
-CREATE TABLE pictures(
-    id SERIAL PRIMARY KEY,
-    file_path TEXT NOT NULL,
-    file_size BIGINT NOT NULL,
-    media_type VARCHAR(100) NOT NULL,
-    data OID NOT NULL
-);
--- changeset nfr:3
-ALTER TABLE user_data ALTER COLUMN role TYPE VARCHAR(255);
-ALTER TABLE user_data ALTER COLUMN image DROP NOT NULL;
-
+-- changeset nfr:5
+ALTER TABLE pictures ADD COLUMN user_id INTEGER;
+ALTER TABLE pictures ADD CONSTRAINT fk_pictures_user_data FOREIGN KEY (user_id) REFERENCES user_data(id);
+ALTER TABLE pictures ADD CONSTRAINT uk_pictures_user_data UNIQUE (user_id);
+-- changeset nfr:6
+ALTER TABLE pictures ADD COLUMN ad_id INTEGER;
+ALTER TABLE pictures ADD CONSTRAINT fk_pictures_ads FOREIGN KEY (ad_id) REFERENCES ads(id);
+ALTER TABLE pictures ADD CONSTRAINT uk_pictures_ads UNIQUE (ad_id);
+-- changeset nfr:7
+ALTER TABLE ads ADD COLUMN user_id INTEGER;
+ALTER TABLE ads ADD CONSTRAINT fk_ads_user_data FOREIGN KEY (user_id) REFERENCES user_data(id);
+-- changeset nfr:8
+ALTER TABLE comments ADD COLUMN ad_id INTEGER;
+ALTER TABLE comments ADD CONSTRAINT fk_comments_ads FOREIGN KEY (ad_id) REFERENCES ads(id);
+-- changeset nfr:9
+ALTER TABLE comments ADD COLUMN user_id INTEGER;
+ALTER TABLE comments ADD CONSTRAINT fk_comments_user_data FOREIGN KEY (user_id) REFERENCES user_data(id);
