@@ -18,6 +18,7 @@ public interface CommentMapper {
      */
     @Mapping(target = "pk", source = "id")
     @Mapping(target = "author", source = "author.id")
+    @Mapping(target = "authorImage", expression = "java(\"/pictures/\" + comment.getAuthor().getImage().getId())")
 //    @Mapping(target = "authorImage", source = "author.image.filePath")
     @Mapping(target = "authorFirstName", source = "author.firstName")
     CommentDto CommentToCommentDto(Comment comment);

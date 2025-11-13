@@ -24,8 +24,10 @@ public interface UserMapper {
     User UserDtoToUserEntity(UserDto userDto);
 
 //    @Mapping(target = "image", ignore = true)
-    @Mapping(target = "image", source = "image.filePath")
+//    @Mapping(target = "image", source = "image.filePath")
+    @Mapping(target = "image", expression = "java(\"/pictures/\" + user.getImage().getId())")
     UserDto UserToUserDto(User user);
+
     UpdateUserDto UserToUpdateUserDto (User user);
     /**
      * User <--- UpdateUser

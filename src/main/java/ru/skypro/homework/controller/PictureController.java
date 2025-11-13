@@ -2,23 +2,29 @@ package ru.skypro.homework.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import ru.skypro.homework.entity.Picture;
 import ru.skypro.homework.service.impl.PictureServiceImpl;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
-@Tag(name = "Авторизация", description = "Методы для авторизации пользователя")
-public class PictureController{
+@Tag(name = "Картинки", description = "Метод для работы с картинками")
+public class PictureController {
     private final PictureServiceImpl pictureServiceImpl;
+
     public PictureController(PictureServiceImpl pictureServiceImpl) {
         this.pictureServiceImpl = pictureServiceImpl;
     }
 
-//    db
-    @GetMapping("/pictures/{id}")
-    public byte[] getPictures(PathVariable pathVariable) {
-        log.error("ycvjbkjnklml");
-        return new byte[0];
+    @GetMapping(value = "/pictures/{id}")
+    public byte[] getImage(@PathVariable Integer id) {
+        Picture picture = pictureServiceImpl.findById(id);
+        return picture.getData(); // ← Берем картинку ИЗ БАЗЫ ДАННЫХ!
     }
 }

@@ -31,7 +31,6 @@ public class Picture {
     private String mediaType;
 
     @Lob
-    @JsonIgnore
     private byte[] data;
 
     @Enumerated(EnumType.STRING)

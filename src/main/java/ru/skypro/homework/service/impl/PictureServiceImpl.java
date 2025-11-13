@@ -21,6 +21,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.UUID;
 
 import javax.transaction.Transactional;
 
@@ -44,11 +45,10 @@ public class PictureServiceImpl implements PictureService {
 
     private final Logger logger = LoggerFactory.getLogger(PictureServiceImpl.class);
 
-//    TODO: unique naming
     public Picture uploadPicture(Integer ownerId, PictureOwner pictureOwner, MultipartFile file) throws IOException {
         logger.info("Was invoked method for uploading a picture");
 
-        Path filePath = Path.of(pictureDir, String.valueOf(pictureOwner) + ownerId + "." + FilenameUtils.getExtension(file.getOriginalFilename()));
+        Path filePath = Path.of(pictureDir, ownerId + String.valueOf(pictureOwner) + String.valueOf(UUID.randomUUID()) + "." + FilenameUtils.getExtension(file.getOriginalFilename()));
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
 
@@ -108,5 +108,13 @@ public class PictureServiceImpl implements PictureService {
 
     public void deleteByAdId(Integer adId) {
         pictureRepository.deleteByAdId(adId);
+    }
+
+    public Picture findById(Integer id) {
+        return pictureRepository.findById(id).orElseThrow();
+    }
+
+    public Picture findByPath(String path) {
+        return pictureRepository.findByFilePath(path).orElseThrow();
     }
 }

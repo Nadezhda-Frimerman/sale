@@ -34,9 +34,6 @@ public class AuthServiceImpl implements AuthService {
 
     private final Logger logger = LoggerFactory.getLogger(AuthServiceImpl.class);
 
-    /*
-    Checked, but token?
-     */
     @Override
     public void login(LoginDto loginDto) {
         logger.info("Method for login was invoked");
@@ -45,8 +42,6 @@ public class AuthServiceImpl implements AuthService {
             if (encoder.matches(loginDto.getPassword(), userDetails.getPassword())) {
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-//                String token = generateJwtToken(userDetails);
-
                 logger.info("User {} successfully logged in", loginDto.getUsername());
             } else {
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);

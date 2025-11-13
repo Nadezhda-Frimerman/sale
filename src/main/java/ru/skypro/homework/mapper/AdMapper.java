@@ -17,7 +17,8 @@ public interface AdMapper {
 
     @Mapping(target = "pk", source = "id")
     @Mapping(target = "author", source = "user.id")
-    @Mapping(target = "image", source = "image.filePath")
+//    @Mapping(target = "image", source = "image.filePath")
+    @Mapping(target = "image", expression = "java(\"/pictures/\" + ad.getImage().getId())")
     AdDto AdToAdDto(Ad ad);
 
     /**
@@ -28,7 +29,8 @@ public interface AdMapper {
     @Mapping(source = "user.lastName", target = "authorLastName")
     @Mapping(source = "user.email", target = "email")
     @Mapping(source = "user.phone", target = "phone")
-    @Mapping(target = "image", source = "image.filePath")
+//    @Mapping(target = "image", source = "image.filePath")
+    @Mapping(target = "image", expression = "java(\"/pictures/\" + ad.getImage().getId())")
     ExtendedAdDto AdtoExtendedAdDto(Ad ad);
 
     /**

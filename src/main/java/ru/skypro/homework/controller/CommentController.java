@@ -21,12 +21,14 @@ public class CommentController implements CommentControllerInterface {
         this.commentServiceImpl = commentServiceImpl;
     }
 
+//    checked
     @GetMapping("/{id}/comments")
     @Override
     public CommentsDto getComments(@PathVariable(name = "id") Integer id) {
         return commentServiceImpl.getAllCommentByAdsId(id);
     }
 
+//    checked
     @PostMapping("/{id}/comments")
     @PreAuthorize("hasRole('USER')")
     @Override
@@ -34,15 +36,17 @@ public class CommentController implements CommentControllerInterface {
         return commentServiceImpl.addComment(id, createOrUpdateCommentDto);
     }
 
+//    checked
     @DeleteMapping("/{adId}/comments/{commentId}")
-    @PreAuthorize("hasRole('ADMIN') or @commentService.getCommentById(#commentId).author.email == authentication.name")
+    @PreAuthorize("hasRole('ADMIN') or @commentServiceImpl.findComment(#commentId).author.email == authentication.name")
     @Override
     public void deleteComment(@PathVariable(name = "adId") Integer adId, @PathVariable(name = "commentId") Integer commentId) {
         commentServiceImpl.removeComment(adId, commentId);
     }
 
+//    checked
     @PatchMapping("/{adId}/comments/{commentId}")
-    @PreAuthorize("@commentService.getCommentById(#commentId).author.email == authentication.name")
+    @PreAuthorize("@commentServiceImpl.findComment(#commentId).author.email == authentication.name")
     @Override
     public CommentDto updateComment(@PathVariable(name = "adId") Integer adId, @PathVariable(name = "commentId") Integer commentId, @RequestBody CreateOrUpdateCommentDto createOrUpdateCommentDto) {
         return commentServiceImpl.updateComment(adId, commentId, createOrUpdateCommentDto);
