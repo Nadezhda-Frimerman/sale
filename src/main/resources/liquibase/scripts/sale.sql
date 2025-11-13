@@ -6,7 +6,7 @@ CREATE TABLE pictures(
     file_path TEXT NOT NULL,
     file_size BIGINT NOT NULL,
     media_type VARCHAR(100) NOT NULL,
-    data BYTEA NOT NULL,
+    data OID NOT NULL,
     pictures_owner VARCHAR(20)
 );
 -- changeset dlok:2

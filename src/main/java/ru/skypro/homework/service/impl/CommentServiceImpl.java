@@ -13,6 +13,7 @@ import ru.skypro.homework.repository.CommentRepository;
 import ru.skypro.homework.service.CommentService;
 import ru.skypro.homework.service.MyUserDetailsManager;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 @Service
@@ -27,44 +28,47 @@ public class CommentServiceImpl implements CommentService {
         this.commentMapper = commentMapper;
     }
 
-//    Получение комментариев объявления
+    //    Получение комментариев объявления
     @Override
     public CommentsDto getAllCommentByAdsId(Integer id) {
         myUserDetailsManager.checkUserAuthenticated();
-        List<CommentDto> commentsDtos=commentMapper.CommentListToCommentDtoList(commentRepository.findAllCommentByAdsId(id));
+        List<CommentDto> commentsDtos = commentMapper.CommentListToCommentDtoList(commentRepository.findAllCommentByAdsId(id));
         CommentsDto commentsDto = new CommentsDto();
         commentsDto.setCount(commentsDtos.size());
         commentsDto.setResults(commentsDtos);
         return commentsDto;
     }
-//    Добавление комментария к объявлению
+
+    //    Добавление комментария к объявлению
     @Override
-    public CommentDto addComment(Integer id, CreateOrUpdateCommentDto createOrUpdateCommentDto){
-    myUserDetailsManager.checkUserAuthenticated();
-    Comment comment = commentMapper.CreateOrUpdateCommentDtoToCommentEntity(createOrUpdateCommentDto);
-    commentRepository.save(comment);
-    return commentMapper.CommentToCommentDto(comment);
-}
-//    Удаление комментария
-    @Override
-    public void removeComment (Integer id){
-    myUserDetailsManager.checkUserAuthenticated();
-    if (!commentRepository.getById(id).getAd().getUser().equals(myUserDetailsManager.getCurrentUser())){
-        throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+    public CommentDto addComment(Integer id, CreateOrUpdateCommentDto createOrUpdateCommentDto) {
+        myUserDetailsManager.checkUserAuthenticated();
+        Comment comment = commentMapper.CreateOrUpdateCommentDtoToCommentEntity(createOrUpdateCommentDto);
+        commentRepository.save(comment);
+        return commentMapper.CommentToCommentDto(comment);
     }
-    commentRepository.deleteById(id);
-}
-//    Обновление комментария
+
+    //    Удаление комментария
     @Override
-    public CommentDto updateComment (Integer id, CreateOrUpdateCommentDto createOrUpdateCommentDto){
-    myUserDetailsManager.checkUserAuthenticated();
-    if (!commentRepository.getById(id).getAd().getUser().equals(myUserDetailsManager.getCurrentUser())){
-        throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+    public void removeComment(Integer adId, Integer commentId) {
+        myUserDetailsManager.checkUserAuthenticated();
+        if (!commentRepository.getById(commentId).getAd().getUser().equals(myUserDetailsManager.getCurrentUser())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+        commentRepository.deleteById(commentId);
     }
-    Comment comment = commentRepository.findById(id).orElseThrow();
-    comment.setText(createOrUpdateCommentDto.getText());
-    commentRepository.save(comment);
-    CommentDto commentDto = commentMapper.CommentToCommentDto(comment);
-    return commentDto;
-}
+
+    //    Обновление комментария
+    @Override
+    public CommentDto updateComment(Integer adId, Integer commentId, CreateOrUpdateCommentDto createOrUpdateCommentDto) {
+        myUserDetailsManager.checkUserAuthenticated();
+        if (!commentRepository.getById(commentId).getAd().getUser().equals(myUserDetailsManager.getCurrentUser())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+        Comment comment = commentRepository.findById(commentId).orElseThrow();
+        comment.setText(createOrUpdateCommentDto.getText());
+        commentRepository.save(comment);
+        CommentDto commentDto = commentMapper.CommentToCommentDto(comment);
+        return commentDto;
+    }
 }

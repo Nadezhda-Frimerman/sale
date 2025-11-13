@@ -45,7 +45,7 @@ public class CommentController {
     @ApiResponse(responseCode = "404", description = "Not found")
     public CommentDto addComment(@PathVariable(name = "id") Integer id,
                                  @RequestBody CreateOrUpdateCommentDto createOrUpdateCommentDto) {
-        return commentServiceImpl.updateComment(id, createOrUpdateCommentDto);
+        return commentServiceImpl.addComment(id, createOrUpdateCommentDto);
     }
 
     @DeleteMapping("/{adId}/comments/{commentId}")
@@ -59,6 +59,7 @@ public class CommentController {
     @ApiResponse(responseCode = "404", description = "Not found")
     public void deleteComment(@PathVariable(name = "adId") Integer adId,
                               @PathVariable(name = "commentId") Integer commentId) {
+        commentServiceImpl.removeComment(adId, commentId);
     }
 
     @PatchMapping("/{adId}/comments/{commentId}")
@@ -73,6 +74,6 @@ public class CommentController {
     public CommentDto updateComment(@PathVariable(name = "adId") Integer adId,
                                     @PathVariable(name = "commentId") Integer commentId,
                                     @RequestBody CreateOrUpdateCommentDto createOrUpdateCommentDto) {
-        return new CommentDto();
+        return commentServiceImpl.updateComment(adId, commentId, createOrUpdateCommentDto);
     }
 }

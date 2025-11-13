@@ -12,7 +12,7 @@ import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.impl.AdServiceImpl;
 
 import javax.validation.Valid;
-
+import java.io.IOException;
 
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -66,7 +66,8 @@ public class AdController {
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "403", description = "Forbidden")
     @ApiResponse(responseCode = "404", description = "Not found")
-    public void removeAd(@PathVariable(name = "id") Integer id) {adServiceImpl.removeAd(id);
+    public void removeAd(@PathVariable(name = "id") Integer id) {
+        adServiceImpl.removeAd(id);
     }
 
     @PatchMapping("/{id}")
@@ -104,7 +105,7 @@ public class AdController {
     @ApiResponse(responseCode = "403", description = "Forbidden")
     @ApiResponse(responseCode = "404", description = "Not found")
     public byte[] updateImage(@PathVariable(name = "id") Integer id,
-                            @RequestParam("image") MultipartFile image) {
-        return new byte[0];
+                              @RequestParam("image") MultipartFile image) throws IOException {
+        return adServiceImpl.uploadAdPicture(id, image);
     }
 }
