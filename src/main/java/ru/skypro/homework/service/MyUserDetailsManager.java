@@ -49,8 +49,7 @@ public class MyUserDetailsManager implements UserDetailsManager {
 
     @Override
     public void updateUser(UserDetails userDetails) {
-        User user = userRepository.findByEmail(userDetails.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + userDetails.getUsername()));
+        User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow(() -> new UsernameNotFoundException("User not found: " + userDetails.getUsername()));
 
         user.setPassword(userDetails.getPassword());
 
@@ -62,8 +61,7 @@ public class MyUserDetailsManager implements UserDetailsManager {
 
     @Override
     public void deleteUser(String username) {
-        User user = userRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+        User user = userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
         userRepository.delete(user);
     }
 
@@ -72,8 +70,7 @@ public class MyUserDetailsManager implements UserDetailsManager {
         Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
         String username = currentUser.getName();
 
-        User user = userRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+        User user = userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 
         if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
             throw new IllegalArgumentException("Old password is incorrect");
@@ -90,34 +87,24 @@ public class MyUserDetailsManager implements UserDetailsManager {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+        User user = userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 
-        List<SimpleGrantedAuthority> authorities = Collections.singletonList(
-                new SimpleGrantedAuthority("ROLE_" + user.getRole().name())
-        );
+        List<SimpleGrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
 
-        return new org.springframework.security.core.userdetails.User(
-                user.getEmail(),
-                user.getPassword(),
-                authorities
-        );
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);
     }
 
     private Role extractRoleFromAuthorities(Collection<? extends GrantedAuthority> authorities) {
-        return authorities.stream()
-                .map(GrantedAuthority::getAuthority)
-                .filter(authority -> authority.startsWith("ROLE_"))
-                .map(authority -> authority.replace("ROLE_", ""))
-                .map(Role::valueOf)
-                .findFirst()
-                .orElse(Role.USER);
+        return authorities.stream().map(GrantedAuthority::getAuthority).filter(authority -> authority.startsWith("ROLE_")).map(authority -> authority.replace("ROLE_", "")).map(Role::valueOf).findFirst().orElse(Role.USER);
     }
-    public User getCurrentUser (){
+
+    public User getCurrentUser() {
+        checkUserAuthenticated();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails u = (UserDetails) authentication.getDetails();
-        return userRepository.findByEmail(u.getUsername()).get();
+        String username = authentication.getName();
+        return userRepository.findByEmail(username).orElseThrow(() -> new RuntimeException("User not found: " + username));
     }
+
     public void checkUserAuthenticated() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {

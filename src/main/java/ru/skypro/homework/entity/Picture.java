@@ -35,7 +35,7 @@ public class Picture {
     private byte[] data;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "picture_owner", nullable = false)
+    @Column(name = "pictures_owner", nullable = false)
     private PictureOwner pictureOwner;
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -45,5 +45,4 @@ public class Picture {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ad_id")
     private Ad ad;
-
 }

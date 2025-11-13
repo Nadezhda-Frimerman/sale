@@ -35,10 +35,9 @@ public class Ad {
     private Picture image;
 
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "ad", fetch = FetchType.LAZY)
     private Collection<Comment> comments;
-
 }

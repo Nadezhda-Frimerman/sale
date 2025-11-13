@@ -1,8 +1,11 @@
 package ru.skypro.homework.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import ru.skypro.homework.dto.NewPasswordDto;
@@ -21,55 +24,80 @@ import java.io.IOException;
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private UserMapper userMapper;
-    private MyUserDetailsManager myUserDetailsManager;
-    private PasswordEncoder encoder;
-    private PictureServiceImpl pictureServiceImpl;
+    private final UserMapper userMapper;
+    private final MyUserDetailsManager myUserDetailsManager;
+    private final PasswordEncoder encoder;
+    private final PictureServiceImpl pictureServiceImpl;
 
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, MyUserDetailsManager myUserDetailsManager, PictureServiceImpl pictureServiceImpl) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, MyUserDetailsManager myUserDetailsManager, PasswordEncoder encoder, PictureServiceImpl pictureServiceImpl) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.myUserDetailsManager = myUserDetailsManager;
+        this.encoder = encoder;
         this.pictureServiceImpl = pictureServiceImpl;
     }
+
+    private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
+    /**
+     * Seems ok
+     */
     @Override
-    public void setPassword (NewPasswordDto newPasswordDto){
+    public void setPassword(NewPasswordDto newPasswordDto) {
+        logger.info("Method for setting the password was invoked");
         myUserDetailsManager.checkUserAuthenticated();
-        if (!encoder.matches(myUserDetailsManager.getCurrentUser().getPassword(), newPasswordDto.getCurrentPassword())){
+        if (!encoder.matches(newPasswordDto.getCurrentPassword(), myUserDetailsManager.getCurrentUser().getPassword())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
         String encodedNewPassword = encoder.encode(newPasswordDto.getNewPassword());
         User user = myUserDetailsManager.getCurrentUser();
         user.setPassword(encodedNewPassword);
         userRepository.save(user);
+        logger.info("New password was saved");
     }
+
+    /*
+    seems fine
+     */
     @Override
-    public UserDto getCurrentUserInformation (){
+    @Transactional
+    public UserDto getCurrentUserInformation() {
+        logger.info("Method for getting current user information was invoked");
         myUserDetailsManager.checkUserAuthenticated();
         return userMapper.UserToUserDto(myUserDetailsManager.getCurrentUser());
     }
+
+//    seems ok
     @Override
-    public UpdateUserDto updateUserInformation (UpdateUserDto updateUserDto){
+    public UpdateUserDto updateUserInformation(UpdateUserDto updateUserDto) {
+        logger.info("Method for updating current user information was invoked");
         myUserDetailsManager.checkUserAuthenticated();
         User user = myUserDetailsManager.getCurrentUser();
-        user.setFirstName(updateUserDto.getFirstName());
-        user.setLastName(updateUserDto.getLastName());
-        user.setPhone(updateUserDto.getPhone());
+//        user.setFirstName(updateUserDto.getFirstName());
+//        user.setLastName(updateUserDto.getLastName());
+//        user.setPhone(updateUserDto.getPhone());
+//        userRepository.save(user);
+//        return userMapper.UserToUpdateUserDto(user);
+        userMapper.safeUpdateUserDtoToUserEntity(updateUserDto, user);
         userRepository.save(user);
+        logger.info("Updated user {}: firstName={}, lastName={}, phone={}", user.getEmail(), updateUserDto.getFirstName(), updateUserDto.getLastName(), updateUserDto.getPhone());
         return userMapper.UserToUpdateUserDto(user);
     }
+
+//    maybe get rid of
     @Override
     public User findUserById(Integer author) {
         return userRepository.findById(author).orElseThrow();
     }
+
+//    TODO: check old pictures
+//    seems fine
     @Override
     public void uploadUserPicture(MultipartFile file) throws IOException {
-        Picture picture = pictureServiceImpl.uploadPicture(myUserDetailsManager.getCurrentUser().getId(), PictureOwner.USER,file);
+        logger.info("Method for updating user picture was invoked");
+        Picture picture = pictureServiceImpl.uploadPicture(myUserDetailsManager.getCurrentUser().getId(), PictureOwner.USER, file);
         User currentUser = myUserDetailsManager.getCurrentUser();
         currentUser.setImage(picture);
         userRepository.save(currentUser);
     }
-
-
-
 }

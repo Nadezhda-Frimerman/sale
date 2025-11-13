@@ -9,7 +9,9 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.entity.Picture;
 import ru.skypro.homework.entity.PictureOwner;
 import org.apache.commons.io.FilenameUtils;
+import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.repository.PictureRepository;
+import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.PictureService;
 
 import javax.imageio.ImageIO;
@@ -31,13 +33,18 @@ public class PictureServiceImpl implements PictureService {
     private String pictureDir;
 
     private final PictureRepository pictureRepository;
+    private final UserRepository userRepository;
+    private final AdRepository adRepository;
 
-    public PictureServiceImpl(PictureRepository pictureRepository) {
+    public PictureServiceImpl(PictureRepository pictureRepository, UserRepository userRepository, AdRepository adRepository) {
         this.pictureRepository = pictureRepository;
+        this.userRepository = userRepository;
+        this.adRepository = adRepository;
     }
 
     private final Logger logger = LoggerFactory.getLogger(PictureServiceImpl.class);
 
+//    TODO: unique naming
     public Picture uploadPicture(Integer ownerId, PictureOwner pictureOwner, MultipartFile file) throws IOException {
         logger.info("Was invoked method for uploading a picture");
 
@@ -52,24 +59,21 @@ public class PictureServiceImpl implements PictureService {
             bis.transferTo(bos);
         }
 
+        logger.info("Picture was transferred");
         Picture picture = new Picture();
         picture.setPictureOwner(pictureOwner);
         picture.setFilePath(filePath.toString());
         picture.setFileSize(file.getSize());
         picture.setMediaType(file.getContentType());
         picture.setData(generateImagePreview(filePath));
-        return pictureRepository.save(picture);
 
-//        switch (pictureOwner) {
-//            case USER -> {
-//                User owner = userServiceImpl.findUserById(ownerId);
-//                owner.setImage(picture);
-//            }
-//            case AD -> {
-//                Ad owner = adServiceImpl.findAdById(ownerId);
-//                owner.setImage(picture);
-//            }
-//        }
+        switch (pictureOwner) {
+            case USER -> picture.setUser(userRepository.findById(ownerId).orElseThrow());
+            case AD -> picture.setAd(adRepository.findById(ownerId).orElseThrow());
+        }
+
+        logger.info("Picture was uploaded");
+        return pictureRepository.save(picture);
     }
 
     public byte[] generateImagePreview(Path filePath) throws IOException {
@@ -86,6 +90,7 @@ public class PictureServiceImpl implements PictureService {
             graphics.dispose();
 
             ImageIO.write(preview, FilenameUtils.getExtension(filePath.getFileName().toString()), baos);
+            logger.info("Image preview was generated");
             return baos.toByteArray();
         }
     }
@@ -99,5 +104,9 @@ public class PictureServiceImpl implements PictureService {
         logger.info("Was invoked method for getting all pictures by page");
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
         return pictureRepository.findAll(pageRequest).getContent();
+    }
+
+    public void deleteByAdId(Integer adId) {
+        pictureRepository.deleteByAdId(adId);
     }
 }

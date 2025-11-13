@@ -23,6 +23,7 @@ public interface UserMapper {
     @Mapping(target = "image", ignore = true)
     User UserDtoToUserEntity(UserDto userDto);
 
+//    @Mapping(target = "image", ignore = true)
     @Mapping(target = "image", source = "image.filePath")
     UserDto UserToUserDto(User user);
     UpdateUserDto UserToUpdateUserDto (User user);
