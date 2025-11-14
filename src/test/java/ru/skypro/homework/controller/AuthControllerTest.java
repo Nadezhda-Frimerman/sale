@@ -6,6 +6,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -16,15 +17,16 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(AdController.class)
+@WebMvcTest(AuthController.class)
 @AutoConfigureMockMvc(addFilters = false)
 class AuthControllerTest {
-@Autowired
+    @MockBean
     private AuthServiceImpl authServiceImpl;
     @Autowired
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
+
     @Test
     @WithMockUser(roles = "USER")
     void login_ShouldReturnOk() throws Exception {
@@ -34,10 +36,7 @@ class AuthControllerTest {
 
         Mockito.doNothing().when(authServiceImpl).login(Mockito.any(LoginDto.class));
 
-        mockMvc.perform(post("/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(loginDto)).with(csrf()))
-                .andExpect(status().isOk());
+        mockMvc.perform(post("/login").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(loginDto)).with(csrf())).andExpect(status().isOk());
 
         Mockito.verify(authServiceImpl).login(Mockito.any(LoginDto.class));
     }

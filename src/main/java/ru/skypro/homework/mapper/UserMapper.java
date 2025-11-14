@@ -9,29 +9,17 @@ import ru.skypro.homework.dto.UpdateUserDto;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.entity.User;
 
+/**
+ * Mapper for User entity (made using mapstruct)
+ * Maps UserDto, UpdateUserDto and RegisterDto
+ */
 @Mapper(componentModel = "spring")
 public interface UserMapper {
-    /**
-     * User <---> UserDto
-     */
-
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "ads", ignore = true)
-    @Mapping(target = "comments", ignore = true)
-    @Mapping(target = "password", ignore = true)
-    @Mapping(target = "role", ignore = true)
-    @Mapping(target = "image", ignore = true)
-    User UserDtoToUserEntity(UserDto userDto);
-
-//    @Mapping(target = "image", ignore = true)
-//    @Mapping(target = "image", source = "image.filePath")
     @Mapping(target = "image", expression = "java(\"/pictures/\" + user.getImage().getId())")
     UserDto UserToUserDto(User user);
 
-    UpdateUserDto UserToUpdateUserDto (User user);
-    /**
-     * User <--- UpdateUser
-     */
+    UpdateUserDto UserToUpdateUserDto(User user);
+
     default void safeUpdateUserDtoToUserEntity(UpdateUserDto updateUserDto, @MappingTarget User user) {
         if (updateUserDto == null) {
             return;
@@ -50,10 +38,6 @@ public interface UserMapper {
         }
     }
 
-    /**
-     * RegisterDto ---> User
-     * Опять же обратное не имеет смысла
-     */
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "ads", ignore = true)
     @Mapping(target = "comments", ignore = true)

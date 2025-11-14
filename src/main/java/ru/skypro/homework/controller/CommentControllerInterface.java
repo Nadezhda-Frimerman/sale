@@ -25,7 +25,7 @@ public interface CommentControllerInterface {
     CommentDto addComment(@PathVariable(name = "id") Integer id, @RequestBody CreateOrUpdateCommentDto createOrUpdateCommentDto);
 
     @DeleteMapping("/{adId}/comments/{commentId}")
-    @PreAuthorize("hasRole('ADMIN') or @commentService.getCommentById(#commentId).author.email == authentication.name")
+    @PreAuthorize("hasRole('ADMIN') or @commentServiceImpl.findComment(#commentId).author.email == authentication.name")
     @Operation(operationId = "deleteComment", summary = "Удаление комментария", tags = {"Комментарии"})
     @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
@@ -34,7 +34,7 @@ public interface CommentControllerInterface {
     void deleteComment(@PathVariable(name = "adId") Integer adId, @PathVariable(name = "commentId") Integer commentId);
 
     @PatchMapping("/{adId}/comments/{commentId}")
-    @PreAuthorize("@commentService.getCommentById(#commentId).author.email == authentication.name")
+    @PreAuthorize("hasRole('ADMIN') or @commentServiceImpl.findComment(#commentId).author.email == authentication.name")
     @Operation(operationId = "updateComment", summary = "Обновление комментария", tags = {"Комментарии"})
     @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "401", description = "Unauthorized")

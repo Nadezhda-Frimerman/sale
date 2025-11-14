@@ -41,48 +41,19 @@ class AdControllerTest {
     @MockBean
     private AdServiceImpl adServiceImpl;
 
-    AdDto adDto1 = AdDto.builder()
-            .author(1)
-            .image("src/test/resources/pictures/despicable.jpg")
-            .pk(100)
-            .price(5000)
-            .title("Test Ad Title")
-            .build();
-    AdDto adDto2 = AdDto.builder()
-            .author(1)
-            .image("src/test/resources/pictures/glass.jpg")
-            .pk(100)
-            .price(5000)
-            .title("Test Ad Title")
-            .build();
+    AdDto adDto1 = AdDto.builder().author(1).image("src/test/resources/pictures/despicable.jpg").pk(100).price(5000).title("Test Ad Title").build();
+    AdDto adDto2 = AdDto.builder().author(1).image("src/test/resources/pictures/glass.jpg").pk(100).price(5000).title("Test Ad Title").build();
 
-    AdsDto adsDto=new AdsDto(2, Arrays.asList(adDto1,adDto2));
-    ExtendedAdDto extendedAdDto = ExtendedAdDto.builder()
-            .pk(1)
-            .authorFirstName("Ivan")
-            .authorLastName("Ivanov")
-            .description("Test description")
-            .email("ivan.ivanov@example.com")
-            .image("src/test/resources/pictures/fox.jpg")
-            .phone("+71234567890")
-            .price(10000)
-            .title("Test Ad Title")
-            .build();
-    CreateOrUpdateAdDto createOrUpdateAdDto = CreateOrUpdateAdDto.builder()
-            .title("Test Ad Title")
-            .price(5000)
-            .description("This is a test description")
-            .build();
+    AdsDto adsDto = new AdsDto(2, Arrays.asList(adDto1, adDto2));
+    ExtendedAdDto extendedAdDto = ExtendedAdDto.builder().pk(1).authorFirstName("Ivan").authorLastName("Ivanov").description("Test description").email("ivan.ivanov@example.com").image("src/test/resources/pictures/fox.jpg").phone("+71234567890").price(10000).title("Test Ad Title").build();
+    CreateOrUpdateAdDto createOrUpdateAdDto = CreateOrUpdateAdDto.builder().title("Test Ad Title").price(5000).description("This is a test description").build();
+
     @Test
     @WithMockUser
     void getAllAds_returnsAdsDto() throws Exception {
         when(adServiceImpl.getAllAds()).thenReturn(adsDto);
 
-        mockMvc.perform((MockMvcRequestBuilders
-                .get("/ads").with(csrf()) //send
-                .accept(MediaType.APPLICATION_JSON)))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+        mockMvc.perform((MockMvcRequestBuilders.get("/ads").with(csrf()).accept(MediaType.APPLICATION_JSON))).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
         Mockito.verify(adServiceImpl, Mockito.times(1)).getAllAds();
     }
@@ -92,36 +63,19 @@ class AdControllerTest {
     void addAd_requiresMultipart_andReturnsAdDto() throws Exception {
         when(adServiceImpl.addAd(any(CreateOrUpdateAdDto.class), any())).thenReturn(adDto1);
 
-        MockMultipartFile image = new MockMultipartFile(
-                "image",
-                "photo.png",
-                MediaType.IMAGE_PNG_VALUE,
-                "image-bytes".getBytes(StandardCharsets.UTF_8)
-        );
+        MockMultipartFile image = new MockMultipartFile("image", "photo.png", MediaType.IMAGE_PNG_VALUE, "image-bytes".getBytes(StandardCharsets.UTF_8));
 
-        MockMultipartFile properties = new MockMultipartFile(
-                "properties",
-                "",
-                MediaType.APPLICATION_JSON_VALUE,
-                objectMapper.writeValueAsBytes(createOrUpdateAdDto)
-        );
+        MockMultipartFile properties = new MockMultipartFile("properties", "", MediaType.APPLICATION_JSON_VALUE, objectMapper.writeValueAsBytes(createOrUpdateAdDto));
 
-        mockMvc.perform(multipart("/ads")
-                        .file(properties)
-                        .file(image)
-                        .contentType(MediaType.MULTIPART_FORM_DATA).with(csrf()))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-                Mockito.verify(adServiceImpl, Mockito.times(1)).addAd(any(CreateOrUpdateAdDto.class), any());
+        mockMvc.perform(multipart("/ads").file(properties).file(image).contentType(MediaType.MULTIPART_FORM_DATA).with(csrf())).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON));
+        Mockito.verify(adServiceImpl, Mockito.times(1)).addAd(any(CreateOrUpdateAdDto.class), any());
     }
 
     @Test
     void getAds_byId_returnsExtendedAdDto() throws Exception {
         when(adServiceImpl.getAdById(ArgumentMatchers.anyInt())).thenReturn(extendedAdDto);
 
-        mockMvc.perform(get("/ads/1").with(csrf()))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+        mockMvc.perform(get("/ads/1").with(csrf())).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON));
         Mockito.verify(adServiceImpl, Mockito.times(1)).getAdById(1);
     }
 
@@ -130,8 +84,7 @@ class AdControllerTest {
     void removeAd_allowsAdmin() throws Exception {
         Mockito.doNothing().when(adServiceImpl).removeAd(ArgumentMatchers.anyInt());
 
-        mockMvc.perform(delete("/ads/5").with(csrf()))
-                .andExpect(status().isOk());
+        mockMvc.perform(delete("/ads/5").with(csrf())).andExpect(status().isOk());
 
         Mockito.verify(adServiceImpl, Mockito.times(1)).removeAd(5);
     }
@@ -139,16 +92,12 @@ class AdControllerTest {
     @Test
     @WithMockUser(roles = "USER")
     void updateAds_requiresOwner() throws Exception {
-       Mockito.when(adServiceImpl.updateAd(eq(1), any(CreateOrUpdateAdDto.class))).thenReturn(adDto1);
+        Mockito.when(adServiceImpl.updateAd(eq(1), any(CreateOrUpdateAdDto.class))).thenReturn(adDto1);
 
-        mockMvc.perform(multipart("/ads/1").with(csrf())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(createOrUpdateAdDto))
-                        .with(request -> {
-                            request.setMethod("PATCH");
-                            return request;
-                        }))
-                .andExpect(status().isOk());
+        mockMvc.perform(multipart("/ads/1").with(csrf()).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(createOrUpdateAdDto)).with(request -> {
+            request.setMethod("PATCH");
+            return request;
+        })).andExpect(status().isOk());
         Mockito.verify(adServiceImpl, Mockito.times(1)).updateAd(eq(1), any(CreateOrUpdateAdDto.class));
     }
 
@@ -156,21 +105,15 @@ class AdControllerTest {
     @WithMockUser(roles = "USER")
     void updateImage_requiresOwner() throws Exception {
         byte[] bytes = "image-bytes".getBytes();
-        MockMultipartFile image = new MockMultipartFile(
-                "image", "avatar.png", MediaType.IMAGE_PNG_VALUE, bytes);
+        MockMultipartFile image = new MockMultipartFile("image", "avatar.png", MediaType.IMAGE_PNG_VALUE, bytes);
 
         when(adServiceImpl.uploadAdPicture(eq(1), any())).thenReturn(bytes);
 
-        mockMvc.perform(multipart("/ads/1/image")
-                        .file(image)
-                        .with(request -> {
-                            request.setMethod("PATCH");
-                            return request;
-                        }))
-                .andExpect(status().isOk())
-                .andExpect(content().bytes(bytes));
+        mockMvc.perform(multipart("/ads/1/image").file(image).with(request -> {
+            request.setMethod("PATCH");
+            return request;
+        })).andExpect(status().isOk()).andExpect(content().bytes(bytes));
 
         Mockito.verify(adServiceImpl, Mockito.times(1)).uploadAdPicture(eq(1), any());
     }
-
 }

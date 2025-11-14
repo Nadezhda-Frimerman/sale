@@ -22,30 +22,25 @@ public class AdController implements AdControllerInterface {
         this.adServiceImpl = adServiceImpl;
     }
 
-//    checked
     @GetMapping
     @Override
     public AdsDto getAllAds() {
         return adServiceImpl.getAllAds();
     }
 
-//    checked
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('USER')")
     @Override
-    public AdDto addAd(@RequestPart("properties") @Valid CreateOrUpdateAdDto properties,
-                       @RequestPart("image") MultipartFile image) throws IOException {
-        return adServiceImpl.addAd(properties,image);
+    public AdDto addAd(@RequestPart("properties") @Valid CreateOrUpdateAdDto properties, @RequestPart("image") MultipartFile image) throws IOException {
+        return adServiceImpl.addAd(properties, image);
     }
 
-//    checked
     @GetMapping("/{id}")
     @Override
     public ExtendedAdDto getAds(@PathVariable(name = "id") Integer id) {
         return adServiceImpl.getAdById(id);
     }
 
-//    checked
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or @adServiceImpl.findAdById(#id).user.email == authentication.name")
     @Override
@@ -53,15 +48,13 @@ public class AdController implements AdControllerInterface {
         adServiceImpl.removeAd(id);
     }
 
-//    checked
     @PatchMapping("/{id}")
-    @PreAuthorize("@adServiceImpl.findAdById(#id).user.email == authentication.name")
+    @PreAuthorize("hasRole('ADMIN') or @adServiceImpl.findAdById(#id).user.email == authentication.name")
     @Override
     public AdDto updateAds(@PathVariable(name = "id") Integer id, @RequestBody CreateOrUpdateAdDto createOrUpdateAdDto) {
         return adServiceImpl.updateAd(id, createOrUpdateAdDto);
     }
 
-//    checked
     @GetMapping("/me")
     @PreAuthorize("hasRole('USER')")
     @Override
@@ -69,7 +62,6 @@ public class AdController implements AdControllerInterface {
         return adServiceImpl.getAllMyAds();
     }
 
-//    checked
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("@adServiceImpl.findAdById(#id).user.email == authentication.name")
     @Override

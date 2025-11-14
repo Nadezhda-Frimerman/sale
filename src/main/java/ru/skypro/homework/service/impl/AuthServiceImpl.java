@@ -17,9 +17,11 @@ import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.MyUserDetailsManager;
 
+/**
+ * Service for login and register processes
+ */
 @Service
 public class AuthServiceImpl implements AuthService {
-
     private final MyUserDetailsManager myUserDetailsManager;
     private final PasswordEncoder encoder;
     private final UserRepository userRepository;
@@ -34,6 +36,11 @@ public class AuthServiceImpl implements AuthService {
 
     private final Logger logger = LoggerFactory.getLogger(AuthServiceImpl.class);
 
+    /**
+     * Method for login
+     *
+     * @param loginDto with username and password
+     */
     @Override
     public void login(LoginDto loginDto) {
         logger.info("Method for login was invoked");
@@ -52,7 +59,10 @@ public class AuthServiceImpl implements AuthService {
     }
 
     /**
-     * TODO: Password
+     * Method for registering the user *p*
+     *
+     * @param registerDto with register info
+     * @return true if user is successfully registered
      */
     @Override
     public boolean register(RegisterDto registerDto) {
@@ -62,7 +72,6 @@ public class AuthServiceImpl implements AuthService {
             return false;
         }
         User user = userMapper.RegisterDtoToUserEntity(registerDto);
-//       Додумать
         String encodedPassword = encoder.encode(registerDto.getPassword());
         user.setPassword(encodedPassword);
         userRepository.save(user);

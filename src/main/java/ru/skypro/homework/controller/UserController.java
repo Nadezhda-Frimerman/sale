@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPasswordDto;
@@ -26,7 +25,6 @@ public class UserController implements UserControllerInterface {
         this.userServiceImpl = userServiceImpl;
     }
 
-//    checked
     @PostMapping("/set_password")
     @PreAuthorize("hasRole('USER')")
     @Override
@@ -34,7 +32,6 @@ public class UserController implements UserControllerInterface {
         userServiceImpl.setPassword(newPasswordDto);
     }
 
-//    checked
     @GetMapping("/me")
     @PreAuthorize("hasRole('USER')")
     @Override
@@ -42,7 +39,6 @@ public class UserController implements UserControllerInterface {
         return userServiceImpl.getCurrentUserInformation();
     }
 
-//    checked
     @PatchMapping("/me")
     @PreAuthorize("hasRole('USER')")
     @Override
@@ -50,7 +46,6 @@ public class UserController implements UserControllerInterface {
         return userServiceImpl.updateUserInformation(updateUserDto);
     }
 
-//    checked
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('USER')")
     @Override

@@ -3,7 +3,6 @@ package ru.skypro.homework.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.entity.Picture;
@@ -20,13 +19,15 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collection;
 import java.util.UUID;
 
 import javax.transaction.Transactional;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
+/**
+ * Service for uploading the picture
+ */
 @Service
 @Transactional
 public class PictureServiceImpl implements PictureService {
@@ -45,17 +46,24 @@ public class PictureServiceImpl implements PictureService {
 
     private final Logger logger = LoggerFactory.getLogger(PictureServiceImpl.class);
 
+    /**
+     * Method for uploading a picture
+     *
+     * @param ownerId      user or ad id
+     * @param pictureOwner user or ad (enum)
+     * @param file         picture file
+     * @return returns Picture entity
+     * @throws IOException when uploading the picture
+     */
+    @Override
     public Picture uploadPicture(Integer ownerId, PictureOwner pictureOwner, MultipartFile file) throws IOException {
-        logger.info("Was invoked method for uploading a picture");
+        logger.info("Method for uploading a picture was invoked");
 
-        Path filePath = Path.of(pictureDir, ownerId + String.valueOf(pictureOwner) + String.valueOf(UUID.randomUUID()) + "." + FilenameUtils.getExtension(file.getOriginalFilename()));
+        Path filePath = Path.of(pictureDir, ownerId + String.valueOf(pictureOwner) + UUID.randomUUID() + "." + FilenameUtils.getExtension(file.getOriginalFilename()));
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
 
-        try (InputStream is = file.getInputStream();
-             OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
-             BufferedInputStream bis = new BufferedInputStream(is, 1024);
-             BufferedOutputStream bos = new BufferedOutputStream(os, 1024)) {
+        try (InputStream is = file.getInputStream(); OutputStream os = Files.newOutputStream(filePath, CREATE_NEW); BufferedInputStream bis = new BufferedInputStream(is, 1024); BufferedOutputStream bos = new BufferedOutputStream(os, 1024)) {
             bis.transferTo(bos);
         }
 
@@ -76,11 +84,17 @@ public class PictureServiceImpl implements PictureService {
         return pictureRepository.save(picture);
     }
 
+    /**
+     * Method for generating image preview
+     *
+     * @param filePath file path
+     * @return returns byte[] for db
+     * @throws IOException when generating preview
+     */
+    @Override
     public byte[] generateImagePreview(Path filePath) throws IOException {
-        logger.info("Was invoked method for generating image preview");
-        try (InputStream is = Files.newInputStream(filePath);
-             BufferedInputStream bis = new BufferedInputStream(is, 1024);
-             ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+        logger.info("Method for generating image preview was invoked");
+        try (InputStream is = Files.newInputStream(filePath); BufferedInputStream bis = new BufferedInputStream(is, 1024); ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             BufferedImage image = ImageIO.read(bis);
 
             int height = image.getHeight() / (image.getWidth() / 100);
@@ -95,26 +109,26 @@ public class PictureServiceImpl implements PictureService {
         }
     }
 
-    public Collection<Picture> getAll() {
-        logger.info("Was invoked method for getting all pictures");
-        return pictureRepository.findAll();
-    }
-
-    public Collection<Picture> getAllByPage(Integer pageNumber, Integer pageSize) {
-        logger.info("Was invoked method for getting all pictures by page");
-        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
-        return pictureRepository.findAll(pageRequest).getContent();
-    }
-
+    /**
+     * Sub-method for deleting picture by ad id
+     *
+     * @param adId ad id
+     */
+    @Override
     public void deleteByAdId(Integer adId) {
+        logger.info("Sub-method for deleting picture by ad id was invoked");
         pictureRepository.deleteByAdId(adId);
     }
 
+    /**
+     * Sub-method for finding picture by id
+     *
+     * @param id picture id
+     * @return returns Picture
+     */
+    @Override
     public Picture findById(Integer id) {
+        logger.info("Sub-method for finding picture by id was invoked");
         return pictureRepository.findById(id).orElseThrow();
-    }
-
-    public Picture findByPath(String path) {
-        return pictureRepository.findByFilePath(path).orElseThrow();
     }
 }

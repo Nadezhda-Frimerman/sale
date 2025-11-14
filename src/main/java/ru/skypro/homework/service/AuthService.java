@@ -8,5 +8,6 @@ import ru.skypro.homework.dto.RegisterDto;
 @Service
 public interface AuthService {
     void login(LoginDto loginDto);
+
     boolean register(RegisterDto registerDto);
 }

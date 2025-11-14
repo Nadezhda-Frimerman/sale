@@ -9,14 +9,7 @@ import ru.skypro.homework.dto.LoginDto;
 
 public interface AuthControllerInterface {
     @PostMapping("/login")
-    @Operation(
-            tags = {"Авторизация"},
-            summary = "Авторизация пользователя",
-            operationId = "login"
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized")
-    })
+    @Operation(tags = {"Авторизация"}, summary = "Авторизация пользователя", operationId = "login")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK"), @ApiResponse(responseCode = "401", description = "Unauthorized")})
     void login(@RequestBody LoginDto loginDto);
 }

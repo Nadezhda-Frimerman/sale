@@ -34,51 +34,25 @@ class CommentControllerTest {
     private ObjectMapper objectMapper;
     @MockBean
     private CommentServiceImpl commentServiceImpl;
-    CommentDto commentDto1 = CommentDto.builder()
-            .author(123)                          // id автора
-            .authorImage("src/test/resources/pictures/glass.jpg")  // ссылка на аватар
-            .authorFirstName("Иван")              // имя автора
-            .createdAt(System.currentTimeMillis()) // время создания в миллисекундах
-            .pk(456)                             // id комментария
-            .text("Текст тестового комментария1") // текст комментария
-            .build();
-    CommentDto commentDto2 = CommentDto.builder()
-            .author(123)                          // id автора
-            .authorImage("src/test/resources/pictures/bee.jpg")  // ссылка на аватар
-            .authorFirstName("Tom")              // имя автора
-            .createdAt(System.currentTimeMillis()) // время создания в миллисекундах
-            .pk(456)                             // id комментария
-            .text("New text") // текст комментария
-            .build();
-    CommentsDto commentsDto = CommentsDto.builder()
-            .count(2)
-            .results(Arrays.asList(commentDto1, commentDto2))
-            .build();
+    CommentDto commentDto1 = CommentDto.builder().author(123).authorImage("src/test/resources/pictures/glass.jpg").authorFirstName("Иван").createdAt(System.currentTimeMillis()).pk(456).text("Текст тестового комментария1").build();
+    CommentDto commentDto2 = CommentDto.builder().author(123).authorImage("src/test/resources/pictures/bee.jpg").authorFirstName("Tom").createdAt(System.currentTimeMillis()).pk(456).text("New text").build();
+    CommentsDto commentsDto = CommentsDto.builder().count(2).results(Arrays.asList(commentDto1, commentDto2)).build();
     CreateOrUpdateCommentDto createOrUpdateCommentDto = new CreateOrUpdateCommentDto("New text");
 
     @Test
     @WithMockUser(roles = "USER")
     void addComment_succeeds() throws Exception {
-        given(commentServiceImpl.addComment(any(Integer.class), any(CreateOrUpdateCommentDto.class)))
-                .willReturn(commentDto2);
+        given(commentServiceImpl.addComment(any(Integer.class), any(CreateOrUpdateCommentDto.class))).willReturn(commentDto2);
 
-        mockMvc.perform(post("/ads/1/comments")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(createOrUpdateCommentDto)).with(csrf()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.text").value("New text"));
+        mockMvc.perform(post("/ads/1/comments").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(createOrUpdateCommentDto)).with(csrf())).andExpect(status().isOk()).andExpect(jsonPath("$.text").value("New text"));
     }
 
     @Test
     @WithMockUser(roles = "USER")
     void getComments_returnsData() throws Exception {
-
         when(commentServiceImpl.getAllCommentByAdsId(123)).thenReturn(commentsDto);
 
-        mockMvc.perform(get("/ads/123/comments").with(csrf()))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-
+        mockMvc.perform(get("/ads/123/comments").with(csrf())).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
@@ -86,15 +60,13 @@ class CommentControllerTest {
     void deleteComment_adminCanDelete() throws Exception {
         willDoNothing().given(commentServiceImpl).removeComment(1, 2);
 
-        mockMvc.perform(delete("/ads/1/comments/2").with(csrf()))
-                .andExpect(status().isOk());
+        mockMvc.perform(delete("/ads/1/comments/2").with(csrf())).andExpect(status().isOk());
         verify(commentServiceImpl).removeComment(1, 2);
     }
 
     @Test
     void deleteComment_requiresAuth() throws Exception {
-        mockMvc.perform(delete("/ads/1/comments/2"))
-                .andExpect(status().isForbidden());
+        mockMvc.perform(delete("/ads/1/comments/2")).andExpect(status().isForbidden());
     }
 
     @Test
@@ -102,12 +74,6 @@ class CommentControllerTest {
     void updateComment_userCanUpdate() throws Exception {
         when(commentServiceImpl.updateComment(any(Integer.class), any(Integer.class), any(CreateOrUpdateCommentDto.class))).thenReturn(commentDto2);
 
-        mockMvc.perform(patch("/ads/1/comments/456")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(createOrUpdateCommentDto)).with(csrf()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.text").value("New text"));
+        mockMvc.perform(patch("/ads/1/comments/456").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(createOrUpdateCommentDto)).with(csrf())).andExpect(status().isOk()).andExpect(jsonPath("$.text").value("New text"));
     }
-
-
 }

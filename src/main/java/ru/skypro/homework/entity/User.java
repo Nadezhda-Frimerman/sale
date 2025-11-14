@@ -23,7 +23,7 @@ public class User {
     private Integer id;
 
     /**
-     * login = email
+     * email is used as a username
      */
     private String email;
 

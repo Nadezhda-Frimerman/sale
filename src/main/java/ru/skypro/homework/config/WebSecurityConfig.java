@@ -34,11 +34,10 @@ public class WebSecurityConfig {
                                 authorization
                                         .mvcMatchers(HttpMethod.GET, "/ads", "/ads/*", "/ads/*/comments").permitAll()
                                         .mvcMatchers(AUTH_WHITELIST).permitAll()
-                                        .mvcMatchers("/ads/**","/users/**").authenticated()
                                         .anyRequest().authenticated()
                 )
-                .cors(withDefaults())  // ← исправь эту строку
-                .sessionManagement(session -> session  // ← ДОБАВЬ ЭТО
+                .cors(withDefaults())
+                .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 )
                 .httpBasic(withDefaults());
@@ -49,5 +48,4 @@ public class WebSecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }

@@ -21,6 +21,9 @@ import ru.skypro.homework.service.UserService;
 
 import java.io.IOException;
 
+/**
+ * Service for dealing with users (CRUD operations)
+ */
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
@@ -40,7 +43,9 @@ public class UserServiceImpl implements UserService {
     private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     /**
-     * Seems ok
+     * Method for setting the password
+     *
+     * @param newPasswordDto with old password to check and new password to update
      */
     @Override
     public void setPassword(NewPasswordDto newPasswordDto) {
@@ -56,8 +61,10 @@ public class UserServiceImpl implements UserService {
         logger.info("New password was saved");
     }
 
-    /*
-    seems fine
+    /**
+     * Method for getting current user information
+     *
+     * @return returns UserDto
      */
     @Override
     @Transactional
@@ -67,31 +74,29 @@ public class UserServiceImpl implements UserService {
         return userMapper.UserToUserDto(myUserDetailsManager.getCurrentUser());
     }
 
-//    seems ok
+    /**
+     * Method for updating current user information
+     *
+     * @param updateUserDto with info to update
+     * @return returns UpdateUserDto
+     */
     @Override
     public UpdateUserDto updateUserInformation(UpdateUserDto updateUserDto) {
         logger.info("Method for updating current user information was invoked");
         myUserDetailsManager.checkUserAuthenticated();
         User user = myUserDetailsManager.getCurrentUser();
-//        user.setFirstName(updateUserDto.getFirstName());
-//        user.setLastName(updateUserDto.getLastName());
-//        user.setPhone(updateUserDto.getPhone());
-//        userRepository.save(user);
-//        return userMapper.UserToUpdateUserDto(user);
         userMapper.safeUpdateUserDtoToUserEntity(updateUserDto, user);
         userRepository.save(user);
         logger.info("Updated user {}: firstName={}, lastName={}, phone={}", user.getEmail(), updateUserDto.getFirstName(), updateUserDto.getLastName(), updateUserDto.getPhone());
         return userMapper.UserToUpdateUserDto(user);
     }
 
-//    maybe get rid of
-    @Override
-    public User findUserById(Integer author) {
-        return userRepository.findById(author).orElseThrow();
-    }
-
-//    TODO: check old pictures
-//    seems fine
+    /**
+     * Method for updating user picture *o.p*
+     *
+     * @param file file with picture
+     * @throws IOException when uploading the picture
+     */
     @Override
     public void uploadUserPicture(MultipartFile file) throws IOException {
         logger.info("Method for updating user picture was invoked");

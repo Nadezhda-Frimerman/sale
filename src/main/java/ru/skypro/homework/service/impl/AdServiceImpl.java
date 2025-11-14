@@ -24,6 +24,9 @@ import ru.skypro.homework.service.MyUserDetailsManager;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Service for dealing with ads (CRUD operations)
+ */
 @Service
 public class AdServiceImpl implements AdService {
     private final AdRepository adRepository;
@@ -42,25 +45,37 @@ public class AdServiceImpl implements AdService {
 
     private final Logger logger = LoggerFactory.getLogger(AdServiceImpl.class);
 
-    //    seems ok, ask about transactional
+    /**
+     * Method for getting all the ads
+     *
+     * @return returns AdsDto with counter and list of AdDto
+     */
     @Override
     @Transactional(readOnly = true)
     public AdsDto getAllAds() {
         logger.info("Method for getting all the ads was invoked");
         List<Ad> ads = adRepository.findAll();
-        List<AdDto> allAds = adMapper.AdListToAdDtoList(ads);
+        List<AdDto> allAds = adMapper.adListToAdDtoList(ads);
         AdsDto adsDto = new AdsDto();
         adsDto.setResults(allAds);
         adsDto.setCount(allAds.size());
+        logger.info("Method for getting all the ads was finished");
         return adsDto;
     }
 
-    //    seems ok
+    /**
+     * Method for adding an ad
+     *
+     * @param properties CreateOrUpdateAdDto with title, price and description to be set
+     * @param image      file with an image
+     * @return returns AdDto
+     * @throws IOException in process of uploading the picture
+     */
     @Override
     public AdDto addAd(CreateOrUpdateAdDto properties, MultipartFile image) throws IOException {
         logger.info("Method for adding an ad was invoked");
         myUserDetailsManager.checkUserAuthenticated();
-        Ad ad = adMapper.CreateOrUpdateAdDtoToAdEntity(properties);
+        Ad ad = adMapper.createOrUpdateAdDtoToAdEntity(properties);
         User author = myUserDetailsManager.getCurrentUser();
         ad.setUser(author);
         adRepository.save(ad);
@@ -69,17 +84,28 @@ public class AdServiceImpl implements AdService {
         ad.setImage(picture);
         logger.info("Picture for ad {} was added", ad.getId());
         adRepository.save(ad);
-        return adMapper.AdToAdDto(ad);
+        logger.info("Method for adding an ad was finished");
+        return adMapper.adToAdDto(ad);
     }
 
+    /**
+     * Method for getting an extended ad by id
+     *
+     * @param id ad id
+     * @return returns ExtendedAdDto
+     */
     @Override
     @Transactional(readOnly = true)
     public ExtendedAdDto getAdById(Integer id) {
-        logger.info("Method for getting an ad by id was invoked");
-        return adMapper.AdtoExtendedAdDto(adRepository.findById(id).orElseThrow());
+        logger.info("Method for getting an extended ad by id was invoked");
+        return adMapper.adtoExtendedAdDto(adRepository.findById(id).orElseThrow());
     }
 
-    //    ask whether it needs checking after pre-authorized?
+    /**
+     * Method for deleting ad by id
+     *
+     * @param id ad id
+     */
     @Override
     public void removeAd(Integer id) {
         logger.info("Method for deleting ad by id was invoked");
@@ -96,6 +122,13 @@ public class AdServiceImpl implements AdService {
         logger.info("Ad {} was deleted", id);
     }
 
+    /**
+     * Method for updating ad by id
+     *
+     * @param id                  ad id
+     * @param createOrUpdateAdDto title, price and description to be updated
+     * @return returns AdDto with updated information
+     */
     @Override
     @Transactional
     public AdDto updateAd(Integer id, CreateOrUpdateAdDto createOrUpdateAdDto) {
@@ -105,21 +138,23 @@ public class AdServiceImpl implements AdService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
         Ad ad = findAdById(id);
-//        ad.setTitle(createOrUpdateAdDto.getTitle());
-//        ad.setPrice(createOrUpdateAdDto.getPrice());
-//        ad.setDescription(createOrUpdateAdDto.getDescription());
         adMapper.updateAdFromCreateOrUpdateAdDto(createOrUpdateAdDto, ad);
         adRepository.save(ad);
         logger.info("Ad {} was updated", id);
-        return adMapper.AdToAdDto(ad);
+        return adMapper.adToAdDto(ad);
     }
 
+    /**
+     * Method for getting all ads of current user
+     *
+     * @return returns AdsDto with counter and list of AdDto
+     */
     @Override
     @Transactional(readOnly = true)
     public AdsDto getAllMyAds() {
-        logger.info("Method for getting all ads of current user was invoked");
+        logger.info(" was invoked");
         myUserDetailsManager.checkUserAuthenticated();
-        List<AdDto> myAdsDto = adMapper.AdListToAdDtoList(adRepository.findAllMyAds(myUserDetailsManager.getCurrentUser().getId()));
+        List<AdDto> myAdsDto = adMapper.adListToAdDtoList(adRepository.findAllMyAds(myUserDetailsManager.getCurrentUser().getId()));
         AdsDto adsDto = new AdsDto();
         adsDto.setCount(myAdsDto.size());
         adsDto.setResults(myAdsDto);
@@ -127,9 +162,17 @@ public class AdServiceImpl implements AdService {
         return adsDto;
     }
 
+    /**
+     * Method for updating ad picture
+     *
+     * @param id    ad id
+     * @param image file with picture
+     * @return returns picture
+     * @throws IOException when uploading the picture
+     */
     @Override
     public byte[] uploadAdPicture(Integer id, MultipartFile image) throws IOException {
-        logger.info("Method for updating ads picture was invoked");
+        logger.info("Method for updating ad picture was invoked");
         Picture picture = pictureServiceImpl.uploadPicture(id, PictureOwner.AD, image);
         logger.info("Picture {} was uploaded", picture.getId());
         Ad currentAd = findAdById(id);
@@ -139,7 +182,15 @@ public class AdServiceImpl implements AdService {
         return findAdById(id).getImage().getData();
     }
 
+    /**
+     * Sub-method for finding ad by id
+     *
+     * @param id ad id
+     * @return returns Ad
+     */
+    @Override
     public Ad findAdById(Integer id) {
+        logger.info("Sub-method for finding ad by id was invoked");
         return adRepository.findById(id).orElseThrow();
     }
 }

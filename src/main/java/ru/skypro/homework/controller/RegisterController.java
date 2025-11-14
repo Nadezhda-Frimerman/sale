@@ -17,7 +17,6 @@ public class RegisterController implements RegisterControllerInterface {
         this.authServiceImpl = authServiceImpl;
     }
 
-//    checked
     @PostMapping("/register")
     @Override
     public void register(@Valid @RequestBody RegisterDto registerDto) {

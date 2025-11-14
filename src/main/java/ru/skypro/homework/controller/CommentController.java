@@ -17,18 +17,16 @@ import ru.skypro.homework.service.impl.CommentServiceImpl;
 public class CommentController implements CommentControllerInterface {
     private final CommentServiceImpl commentServiceImpl;
 
-    public CommentController(CommentServiceImpl commentService, CommentServiceImpl commentServiceImpl) {
+    public CommentController(CommentServiceImpl commentServiceImpl) {
         this.commentServiceImpl = commentServiceImpl;
     }
 
-//    checked
     @GetMapping("/{id}/comments")
     @Override
     public CommentsDto getComments(@PathVariable(name = "id") Integer id) {
         return commentServiceImpl.getAllCommentByAdsId(id);
     }
 
-//    checked
     @PostMapping("/{id}/comments")
     @PreAuthorize("hasRole('USER')")
     @Override
@@ -36,7 +34,6 @@ public class CommentController implements CommentControllerInterface {
         return commentServiceImpl.addComment(id, createOrUpdateCommentDto);
     }
 
-//    checked
     @DeleteMapping("/{adId}/comments/{commentId}")
     @PreAuthorize("hasRole('ADMIN') or @commentServiceImpl.findComment(#commentId).author.email == authentication.name")
     @Override
@@ -44,9 +41,8 @@ public class CommentController implements CommentControllerInterface {
         commentServiceImpl.removeComment(adId, commentId);
     }
 
-//    checked
     @PatchMapping("/{adId}/comments/{commentId}")
-    @PreAuthorize("@commentServiceImpl.findComment(#commentId).author.email == authentication.name")
+    @PreAuthorize("hasRole('ADMIN') or @commentServiceImpl.findComment(#commentId).author.email == authentication.name")
     @Override
     public CommentDto updateComment(@PathVariable(name = "adId") Integer adId, @PathVariable(name = "commentId") Integer commentId, @RequestBody CreateOrUpdateCommentDto createOrUpdateCommentDto) {
         return commentServiceImpl.updateComment(adId, commentId, createOrUpdateCommentDto);

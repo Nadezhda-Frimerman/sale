@@ -18,7 +18,6 @@ public class AuthController implements AuthControllerInterface {
         this.authServiceImpl = authServiceImpl;
     }
 
-//    checked
     @PostMapping("/login")
     @Override
     public void login(@RequestBody LoginDto loginDto) {
