@@ -31,7 +31,6 @@ public class Ad {
     private String description;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "picture_id")
     private Picture image;
 
     @ManyToOne
