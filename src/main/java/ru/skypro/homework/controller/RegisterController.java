@@ -1,35 +1,26 @@
 package ru.skypro.homework.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.RegisterDto;
-import ru.skypro.homework.service.impl.RegisterServiceImpl;
+import ru.skypro.homework.service.impl.AuthServiceImpl;
 
 import javax.validation.Valid;
 
-
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
-@RequiredArgsConstructor
 @Tag(name = "Регистрация", description = "Методы для регистрации пользователя")
-public class RegisterController {
-    private final RegisterServiceImpl registerServiceImpl;
+public class RegisterController implements RegisterControllerInterface {
+    private final AuthServiceImpl authServiceImpl;
+
+    public RegisterController(AuthServiceImpl authServiceImpl) {
+        this.authServiceImpl = authServiceImpl;
+    }
 
     @PostMapping("/register")
-    @Operation(
-            tags = {"Регистрация"},
-            summary = "Регистрация пользователя",
-            operationId = "register"
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Created"),
-            @ApiResponse(responseCode = "400", description = "Bad Request")
-    })
+    @Override
     public void register(@Valid @RequestBody RegisterDto registerDto) {
+        authServiceImpl.register(registerDto);
     }
 }
 

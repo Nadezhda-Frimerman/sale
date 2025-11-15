@@ -1,4 +1,5 @@
 package ru.skypro.homework.dto;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,8 +17,8 @@ import javax.validation.constraints.Size;
 public class CreateOrUpdateCommentDto {
     @NotNull
     @Schema(requiredMode = Schema.RequiredMode.REQUIRED,
-    type = "string",
-    description = "текст комментария")
+            type = "string",
+            description = "текст комментария")
     @Size(min = 8, max = 64)
     private String text;
 }
