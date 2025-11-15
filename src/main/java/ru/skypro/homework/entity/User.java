@@ -23,7 +23,7 @@ public class User {
     private Integer id;
 
     /**
-     * login = email
+     * email is used as a username
      */
     private String email;
 
@@ -40,7 +40,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    private String image;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "picture_id")
+    private Picture image;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Collection<Ad> ads = new ArrayList<>();

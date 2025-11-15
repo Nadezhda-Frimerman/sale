@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -33,11 +34,12 @@ public class WebSecurityConfig {
                                 authorization
                                         .mvcMatchers(HttpMethod.GET, "/ads", "/ads/*", "/ads/*/comments").permitAll()
                                         .mvcMatchers(AUTH_WHITELIST).permitAll()
-                                        .mvcMatchers("/ads/**","/users/**").authenticated()
                                         .anyRequest().authenticated()
                 )
-                .cors()
-                .and()
+                .cors(withDefaults())
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                )
                 .httpBasic(withDefaults());
         return http.build();
     }
@@ -46,5 +48,4 @@ public class WebSecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }

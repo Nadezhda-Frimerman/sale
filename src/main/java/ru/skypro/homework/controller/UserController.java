@@ -1,9 +1,6 @@
 package ru.skypro.homework.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,56 +11,45 @@ import ru.skypro.homework.dto.UpdateUserDto;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.service.impl.UserServiceImpl;
 
+import java.io.IOException;
+
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/users")
-@RequiredArgsConstructor
 @Tag(name = "Пользователи", description = "Методы для получения и изменения информации пользователя")
-public class UserController {
-    private final UserServiceImpl userService;
+public class UserController implements UserControllerInterface {
+    private final UserServiceImpl userServiceImpl;
+
+    public UserController(UserServiceImpl userServiceImpl) {
+        this.userServiceImpl = userServiceImpl;
+    }
 
     @PostMapping("/set_password")
     @PreAuthorize("hasRole('USER')")
-    @Operation(operationId = "setPassword",
-            summary = "Обновление пароля",
-            tags = {"Пользователи"})
-    @ApiResponse(responseCode = "200", description = "OK")
-    @ApiResponse(responseCode = "401", description = "Unauthorized")
-    @ApiResponse(responseCode = "403", description = "Forbidden")
+    @Override
     public void setPassword(@RequestBody NewPasswordDto newPasswordDto) {
-//        userService.setPassword(newPasswordDto, authentication.getName());
+        userServiceImpl.setPassword(newPasswordDto);
     }
 
     @GetMapping("/me")
     @PreAuthorize("hasRole('USER')")
-    @Operation(operationId = "getUser",
-            summary = "Получение информации об авторизованном пользователе",
-            tags = {"Пользователи"})
-    @ApiResponse(responseCode = "200", description = "OK")
-    @ApiResponse(responseCode = "401", description = "Unauthorized")
+    @Override
     public UserDto getUser() {
-        return new UserDto();
+        return userServiceImpl.getCurrentUserInformation();
     }
 
     @PatchMapping("/me")
     @PreAuthorize("hasRole('USER')")
-    @Operation(operationId = "updateUser",
-            summary = "Обновление информации об авторизованном пользователе",
-            tags = {"Пользователи"})
-    @ApiResponse(responseCode = "200", description = "OK")
-    @ApiResponse(responseCode = "401", description = "Unauthorized")
+    @Override
     public UpdateUserDto updateUser(@RequestBody UpdateUserDto updateUserDto) {
-        return new UpdateUserDto();
+        return userServiceImpl.updateUserInformation(updateUserDto);
     }
 
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('USER')")
-    @Operation(operationId = "updateUserImage",
-            summary = "Обновление аватара авторизованного пользователя",
-            tags = {"Пользователи"})
-    @ApiResponse(responseCode = "200", description = "OK")
-    @ApiResponse(responseCode = "401", description = "Unauthorized")
-    public void updateUserImage(@RequestParam("image") MultipartFile image) {
+    @Override
+    public void updateUserImage(@RequestParam("image") MultipartFile image) throws IOException {
+        userServiceImpl.uploadUserPicture(image);
     }
 }
