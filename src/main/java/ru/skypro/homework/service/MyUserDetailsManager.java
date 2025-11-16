@@ -126,5 +126,6 @@ public class MyUserDetailsManager implements UserDetailsManager {
         if (authentication == null || !authentication.isAuthenticated()) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
+        logger.info("User was authenticated");
     }
 }

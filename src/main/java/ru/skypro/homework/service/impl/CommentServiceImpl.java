@@ -83,7 +83,7 @@ public class CommentServiceImpl implements CommentService {
     public void removeComment(Integer adId, Integer commentId) {
         logger.info("Method for removing a comment was invoked");
         myUserDetailsManager.checkUserAuthenticated();
-        if (!findComment(commentId).getAd().getUser().equals(myUserDetailsManager.getCurrentUser())) {
+        if (!findComment(commentId).getAuthor().equals(myUserDetailsManager.getCurrentUser())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
         commentRepository.deleteById(commentId);
@@ -102,7 +102,7 @@ public class CommentServiceImpl implements CommentService {
     public CommentDto updateComment(Integer adId, Integer commentId, CreateOrUpdateCommentDto createOrUpdateCommentDto) {
         logger.info("Method for updating comment was invoked");
         myUserDetailsManager.checkUserAuthenticated();
-        if (!findComment(commentId).getAd().getUser().equals(myUserDetailsManager.getCurrentUser())) {
+        if (!findComment(commentId).getAuthor().equals(myUserDetailsManager.getCurrentUser())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
         Comment comment = commentRepository.findById(commentId).orElseThrow();
