@@ -30,13 +30,14 @@ public class Ad {
     @Size(min = 8, max = 64)
     private String description;
 
-    @ManyToOne
-    @JoinColumn(name="user_id")
-    private User user;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "picture_id")
+    private Picture image;
 
-    private String image;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @OneToMany(mappedBy = "ad", fetch = FetchType.LAZY)
     private Collection<Comment> comments;
-
 }

@@ -60,5 +60,6 @@ public class RegisterDto {
             description = "роль пользователя",
             example = "USER"
     )
+
     private Role role;
 }

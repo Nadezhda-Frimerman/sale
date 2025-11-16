@@ -1,5 +1,5 @@
 package ru.skypro.homework.entity;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,7 +30,17 @@ public class Picture {
     private String mediaType;
 
     @Lob
-    @JsonIgnore
     private byte[] data;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "pictures_owner", nullable = false)
+    private PictureOwner pictureOwner;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ad_id")
+    private Ad ad;
 }

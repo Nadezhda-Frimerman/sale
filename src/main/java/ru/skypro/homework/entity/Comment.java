@@ -1,4 +1,5 @@
 package ru.skypro.homework.entity;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,10 +28,10 @@ public class Comment {
     private Long createdAt;
 
     @ManyToOne
-    @JoinColumn(name="ad_id")
+    @JoinColumn(name = "ad_id")
     private Ad ad;
 
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     private User author;
 }
